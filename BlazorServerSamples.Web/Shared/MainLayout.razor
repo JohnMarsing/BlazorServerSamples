@@ -1,0 +1,30 @@
+﻿@using BlazorServerSamples.Web.Settings
+@using Microsoft.Extensions.Options
+
+@inherits LayoutComponentBase
+@inject IOptions<AppSettings> AppSettings
+
+
+<PageTitle>Blazor Server Samples</PageTitle>
+
+<div class="page">
+	<div class="sidebar">
+		<NavMenu />
+	</div>
+
+	<main>
+		<div class="top-row px-4">
+			<a href="https://github.com/JohnMarsing" target="_blank">Github.com/JohnMarsing</a>
+		</div>
+
+		<article class="content px-4">
+			@Body
+		</article>
+		<footer class="text-muted mb-3">
+			<p class="text-center">
+				@DateTime.Now.Year @AppSettings.Value.SiteTitle | &copy;
+			</p>
+		</footer>
+	</main>
+
+</div>

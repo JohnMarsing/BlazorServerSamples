@@ -1,0 +1,15 @@
+﻿
+# [Upgrading a .NET 5 "Startup-based" app to .NET 6](https://andrewlock.net/exploring-dotnet-6-part-12-upgrading-a-dotnet-5-startup-based-app-to-dotnet-6/)
+- [12 Part series](https://andrewlock.net/series/exploring-dotnet-6/)
+
+> Most of the questions are around the "minimal hosting" changes, and "minimal APIs", and what that means for their existing .NET 5 apps.
+> For the new `WebApplication` and `WebApplicationBuilder` types suggest looking at the [second post in this series](https://andrewlock.net/exploring-dotnet-6-part-2-comparing-webapplicationbuilder-to-the-generic-host/).
+
+Typical minimal `Program.cs`
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+app.MapGet("/", () => "Hello World!");
+app.Run();
+```
+

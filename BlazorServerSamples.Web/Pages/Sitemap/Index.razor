@@ -1,0 +1,32 @@
+﻿@page "/Sitemap"
+@using Page = BlazorServerSamples.Web.Links.Sitemap
+@using PageBack = BlazorServerSamples.Web.Links.Home
+
+<PageTitle>@Page.Title</PageTitle>
+
+<div class="pb-2 mt-4 mb-2 border-bottom">
+	<h2><i class="@Page.Icon"></i> @Page.Title</h2>
+</div>
+
+
+<div class="h4 mb-3">
+	<ul class="fa-ul">
+		@foreach (var item in SitemapLinks)
+		{
+			<li>
+				<span class="fa-li"><i class="@item.Icon"></i></span>
+				<a href="@item.Index">@item.Title	</a>
+			</li>
+		}
+	</ul>
+</div>
+
+<div class="row d-print-none">
+	<div class="col-12">
+		<a href="@PageBack.Index"
+			 class="btn btn-info" title="Back to @PageBack.Title">
+			<i class="far fa-arrow-alt-circle-left"></i> Back to @PageBack.Title
+		</a>
+	</div>
+</div>
+

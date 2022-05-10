@@ -1,0 +1,47 @@
+﻿@page "/EventHandler"
+<h1>Event Handler</h1>
+
+<h4>@currentHeading</h4>
+
+<p>
+	<label>
+		New title
+		<input @bind="newHeading" />
+	</label>
+	<button @onclick="UpdateHeading">
+		Update heading
+	</button>
+</p>
+
+<p>
+	<label>
+		<input type="checkbox" @onchange="CheckChanged" />
+		@checkedMessage
+	</label>
+</p>
+
+<hr class="warning" />
+
+<h1>Lambda expressions</h1>
+
+<hr class="warning" />
+
+<h1>Iteration Stuff</h1>
+<h3>@heading2</h3>
+<p>Iterating over a set of elements.</p>
+
+@for (var i = 1; i < 4; i++)
+{
+	var buttonNumber = i;
+	//Do not use a loop variable (e.g. i above) directly in a lambda expression
+	<p>
+		<button @onclick="@(e => UpdateHeading(e, buttonNumber))">
+			Button #@i
+		</button>
+	</p>
+}
+
+
+@code {
+
+}

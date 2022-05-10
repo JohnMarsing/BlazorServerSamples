@@ -1,0 +1,86 @@
+﻿@page "/"
+@using Page = BlazorServerSamples.Web.Links.Home
+
+@using BlazorServerSamples.Web.Services
+
+<PageTitle>@Page.Title</PageTitle>
+
+<div class="pb-2 mt-4 mb-2 border-bottom">
+	<h2><i class="@Page.Icon"></i> @Page.Title</h2>
+</div>
+
+<p class="my-2">Test bed of Blazor Server Techniques</p>
+
+<div class="card bg-light mt-2">
+	<div class="card-header py-1 text-center">Standard things to include</div>
+
+	<div class="card-body py-1 mt-3">
+		<ul>
+			<li>Serilog</li>
+			<li>Smart Enum</li>
+			<li>Dapper</li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="card border-info mt-3">
+	<div class="card-header py-1 text-center">EventCallback</div>
+
+	<div class="card-body py-1">
+		<ul>
+			<li><a href='/EventCallback/PasswordParent' target="_blank">Password Parent</a></li>
+			<li><a href='/EventCallback/RenderFragmentParent' target="_blank">RenderFragment Parent</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="card border-info mt-3">
+	<div class="card-header py-1 text-center">SmartEnum</div>
+	<div class="card-body py-1">
+		<ul>
+			<li><a href='/SmartEnums' target="_blank">SmartEnums Index</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="card border-info mt-3">
+	<div class="card-header py-1 text-center">Event Handler</div>
+	<div class="card-body py-1">
+		<ul>
+			<li><a href='/EventHandler' target="_blank">Event Handler Index</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="card border-info mt-3">
+	<div class="card-header py-1 text-center">ToDo Examples</div>
+	<div class="card-body py-1">
+		<ul>
+			<li><a href='/ToDoSortJson' target="_blank">ToDo Sort Json</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="card border-info mt-3">
+	<div class="card-header py-1 text-center">More Examples Not Yet Done</div>
+	<div class="card-body py-1">
+		<ul>
+			<li><a href='/' target="_blank">Dropdown</a></li>
+			<li><a href='/' target="_blank">Links</a></li>
+		</ul>
+	</div>
+</div>
+
+<SettingsList />
+
+@*
+
+	- InputSelectEnumPage.razor page "/BlazorExamples/DropDownList"
+	- Dropdown/BibleBookInputSelectEnumNOWORKY
+
+*@

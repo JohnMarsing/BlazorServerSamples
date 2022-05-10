@@ -1,0 +1,38 @@
+﻿@page "/EventCallback/RenderFragmentParent"
+
+
+@using Microsoft.AspNetCore.Components;
+
+<h1>RenderFragment Parent/Child example with AlertBox</h1>
+<h5>Doesn't work well</h5>
+
+<RenderFragmentChild Title="Panel Title from Parent"
+										 OnClickCallback="@ShowMessage">
+	Content of the child component is supplied by the parent component.
+</RenderFragmentChild>
+
+<p>@message</p>
+
+@*<AlertBox> test</AlertBox>*@
+
+<AlertBox>
+	@*<HeaderContent>HeaderContent Goes HERE!</HeaderContent>*@
+	<span> Child Content 1</span>
+</AlertBox>
+
+
+<AlertBox>
+	<span> Child Content 1 NOT using Attribute Splatting</span>
+</AlertBox>
+
+<AlertBox class="alert-dark">
+	<span> Child Content 2 using Attribute Splatting</span>
+</AlertBox>
+
+@code {
+	private string message;
+	private void ShowMessage(MouseEventArgs e)
+	{
+		message = $"Blaze a new trail with Blazor! ({e.ScreenX}:{e.ScreenY})";
+	}
+}
