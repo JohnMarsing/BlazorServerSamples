@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Upgrading a .NET 5 &quot;Startup-based&quot; app to .NET 6</title>
+</head>
+<body>
+
+    <h2 id="upgrading-a.net-5-startup-based-app-to.net-6"><a href="https://andrewlock.net/exploring-dotnet-6-part-12-upgrading-a-dotnet-5-startup-based-app-to-dotnet-6/">Upgrading a .NET 5 &quot;Startup-based&quot; app to .NET 6</a></h2>
+<ul>
+<li><a href="https://andrewlock.net/series/exploring-dotnet-6/">12 Part series</a></li>
+</ul>
+<blockquote>
+<p>Most of the questions are around the &quot;minimal hosting&quot; changes, and &quot;minimal APIs&quot;, and what that means for their existing .NET 5 apps.</p>
+</blockquote>
+<h3 id="webapplication-and-webapplicationbuilder"><code>WebApplication</code> and <code>WebApplicationBuilder</code></h3>
+<blockquote>
+<p>For the new <code>WebApplication</code> and <code>WebApplicationBuilder</code> types suggest looking at the <a href="https://andrewlock.net/exploring-dotnet-6-part-2-comparing-webapplicationbuilder-to-the-generic-host/">second post in this series</a>.</p>
+</blockquote>
+<p>Typical minimal <code>Program.cs</code> that uses  <code>WebApplication</code></p>
+<pre><code class="language-csharp">var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+app.MapGet(&quot;/&quot;, () =&gt; &quot;Hello World!&quot;);
+app.Run();
+</code></pre>
+<h2 id="options">Options</h2>
+<ol>
+<li><strong>Do nothing</strong></li>
+</ol>
+<ul>
+<li>the old way still works, just make change like this =&gt; <code>&lt;TargetFramework&gt;net6.0&lt;/TargetFramework&gt;</code></li>
+</ul>
+<ol start="2">
+<li><strong>Re-use your Startup class</strong></li>
+</ol>
+<ul>
+<li>You can still use the new <code>WebApplication</code> style, but don't to put everything in Program.cs.</li>
+</ul>
+<pre><code class="language-csharp">var builder = WebApplication.CreateBuilder(args);
+
+var startup = new Startup(builder.Configuration); // Manually create an instance of the Startup class
+startup.ConfigureServices(builder.Services);      // Manually call ConfigureServices()
+
+var app = builder.Build();
+//app.MapGet(&quot;/&quot;, () =&gt; &quot;Hello World!&quot;);	  // does this go away?
+
+startup.Configure(app, app.Lifetime);             // Call Configure(), passing in the dependencies
+app.Run();
+
+</code></pre>
+<blockquote>
+<p>This is probably the simplest approach to re-use your Startup class if you want to shift to the new WebApplication approach.
+Beware, For example, you can't change settings like the app name or environment after you've created a WebApplicationBuilder.
+See the <a href="https://docs.microsoft.com/en-us/aspnet/core/migration/50-to-60?view=aspnetcore-6.0&amp;tabs=visual-studio#differences-between-the-aspnet-core-5-and-6-hosting-models">docs</a> for more of these subtle differences.</p>
+</blockquote>
+<ol start="3">
+<li><strong>Do Local methods in Program.cs</strong></li>
+</ol>
+<blockquote>
+<p>I probably wouldn't choose to create a Startup class, but I probably would add similar methods into my Program.cs file to give it some structure.</p>
+</blockquote>
+<pre><code class="language-csharp">var builder = WebApplication.CreateBuilder(args);
+
+ConfigureConfiguration(builder.configuration);
+ConfigureServices(builder.Services);
+
+var app = builder.Build();
+
+ConfigureMiddleware(app, app.Services);
+ConfigureEndpoints(app, app.Services);
+
+app.Run();
+
+void ConfigureConfiguration(ConfigurationManager configuration) =&gt; { }
+void ConfigureServices(IServiceCollection services) =&gt; { }  // BlazorServerSamples.Web\ServiceCollectionExtensions.txt
+void ConfigureMiddleware(IApplicationBuilder app, IServiceProvider services) =&gt; { }
+void ConfigureEndpoints(IEndpointRouteBuilder app, IServiceProvider services) =&gt; { }
+</code></pre>
+<ul>
+<li>I have separate methods for setting up middleware (which is sensitive to order) and endpoint (not sensitive to order)</li>
+<li>I used the <code>IApplicationBuilder</code> and <code>IEndpointRouteBuilder</code> types in the method signatures to enforce it.</li>
+<li>It's easy to update the method signatures or break these out if we need more flexibility.</li>
+</ul>
+<h4 id="notes-about-the-above-code-block">Notes about the above code block</h4>
+<ol>
+<li><strong>ConfigurationManager</strong></li>
+</ol>
+<ul>
+<li>Added in .Net 6 to support ASP.NET Core's new <code>WebApplication</code> model</li>
+</ul>
+<pre><code class="language-csharp">  void ConfigureConfiguration(ConfigurationManager configuration) =&gt; { }
+// Hadn't used this before, see [Looking inside ConfigurationManager in .NET 6](https://andrewlock.net/exploring-dotnet-6-part-1-looking-inside-configurationmanager-in-dotnet-6/)
+</code></pre>
+<ol start="2">
+<li><strong>IServiceCollection</strong></li>
+</ol>
+<ul>
+<li>code referenced above</li>
+<li>see ServiceCollectionExtensions.txt</li>
+</ul>
+<pre><code class="language-csharp">  void ConfigureServices(IServiceCollection services) =&gt; { }
+
+/*
+  ServiceCollectionExtensions.txt
+  public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+*/
+</code></pre>
+<ol start="3">
+<li><strong>ConfigureMiddleware</strong></li>
+</ol>
+<ul>
+<li>code referenced above</li>
+<li>see ServiceCollectionExtensions.txt</li>
+</ul>
+<pre><code class="language-csharp">  void ConfigureMiddleware(IApplicationBuilder app, IServiceProvider services) =&gt; { }
+</code></pre>
+<ol start="4">
+<li><strong>ConfigureEndpoints</strong></li>
+</ol>
+<ul>
+<li>code referenced above</li>
+</ul>
+<pre><code class="language-csharp">  void ConfigureEndpoints(IEndpointRouteBuilder app, IServiceProvider services) =&gt; { }
+</code></pre>
+<p>Old .net 5 <strong>Startup.cs</strong></p>
+<pre><code class="language-csharp">app.UseEndpoints(endpoints =&gt;
+{
+	endpoints.MapRazorPages();
+	endpoints.MapBlazorHub();
+	endpoints.MapFallbackToPage(&quot;/_Host&quot;);
+});
+</code></pre>
+<hr />
+<h2 id="part-1-looking-inside-configurationmanager-in.net-6">Part 1 Looking inside ConfigurationManager in .NET 6</h2>
+<blockquote>
+<p>ConfigurationManager was added to support ASP.NET Core's new <code>WebApplication</code> model, used for simplifying the ASP.NET Core startup code.
+However ConfigurationManager is very much an <strong>implementation detail</strong>. It was introduced to optimise a specific scenario (which I'll describe shortly),
+but for the most part, you don't need to (and won't) know you're using it.</p>
+</blockquote>
+
+
+</body>
+</html>

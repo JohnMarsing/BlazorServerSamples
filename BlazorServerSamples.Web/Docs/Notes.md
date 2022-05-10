@@ -1,4 +1,24 @@
-﻿# Bugs
+﻿# ToDo
+## Add a `GlobalUsings.cs` class
+- See https://gunnarpeipman.com/global-usings/
+
+Example
+```csharp
+global using System.Data;
+global using System.Data.SqlClient;
+global using ConsoleApp4.FileAccess;
+```
+
+For MVC and RP, instead of keeping usings in `_ViewImports.cs` make a global usings file.
+
+```csharp
+global using System.Diagnostics;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Mvc.RazorPages;
+```
+
+
+# Bugs
 ## Bug 001 AppSettings NoWorky
 
 Inside `Program.cs`, I Can't figure out how to read the sections in `appsettings.json` and save them in the class `AppSettings.cs` so that it can be referenced latter on.
