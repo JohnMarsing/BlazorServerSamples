@@ -7,14 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Docs\Program_cs_OLD_DELETE.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Docs\Program_cs_OLD_DELETE.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Ardalis.SmartEnum" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

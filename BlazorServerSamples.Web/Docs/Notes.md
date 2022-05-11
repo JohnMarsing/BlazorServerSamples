@@ -1,4 +1,5 @@
 ﻿# ToDo
+
 ## Add a `GlobalUsings.cs` class
 - See https://gunnarpeipman.com/global-usings/
 
@@ -18,149 +19,7 @@ global using Microsoft.AspNetCore.Mvc.RazorPages;
 ```
 
 
-# Bugs
-## Bug 001 AppSettings NoWorky
-
-Inside `Program.cs`, I Can't figure out how to read the sections in `appsettings.json` and save them in the class `AppSettings.cs` so that it can be referenced latter on.
-I could do this before in .Net 5 when there was a Startup.cs class but this got changed.
-I included notes on how I, in the past, extracted a connection string as well
-
-
-```csharp
-
-//builder.Services.AddOptions
-//IWebHostEnvironment environment = builder.Environment;
-//var settings = builder.Configuration.GetSection("AppSettings").Get<AppSettings>();
-
-
-/*
-ConfigurationManager configuration = builder.Configuration;
-configuration.AddConfiguration
-builder.Services.Configure<AppSettings>(options => Configuration.GetSection("AppSettings").Bind(options));
-builder.Services.Configure<SampleDataFiles>(options => Configuration.GetSection("SampleDataFiles").Bind(options));
-
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-	options.Configuration = builder.Configuration["Redis"];
-});
-
- */
-
-```
-
-### Refrences
-
-- LivingMessiah.Web\Startup.cs
-
-**Startup.cs**
-```csharp
-namespace LivingMessiah.Web;
-
-public class Startup
-{
-	public Startup(IConfiguration configuration)
-	{
-		Configuration = configuration;
-	}
-
-	public IConfiguration Configuration { get; }
-
-	public void ConfigureServices(IServiceCollection services)
-	{
-		//...
-		services.AddCustomAuthentication(Configuration);
-		services.Configure<AppSettings>(options => Configuration.GetSection("AppSettings").Bind(options));
-		services.Configure<SukkotSettings>(options => Configuration.GetSection("SukkotSettings").Bind(options));
-	}
-
-	public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-	{
-		//...	
-		app.UseSerilogRequestLogging();
-		//...			
-	}
-}
-```
-
-**Program.cs**
-- I added this here because I want to use Serilog to stuff in `Startup.cs`
-```csharp
-using System;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Serilog;
-
-namespace LivingMessiah.Web;
-
-public class Program
-{
-		public static void Main(string[] args)
-		{
-				string appSettingJson;
-				if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Development)
-				{
-						appSettingJson = "appsettings.Development.json";
-				}
-				else
-				{
-						appSettingJson = "appsettings.Production.json";
-				}
-
-				var configuration = new ConfigurationBuilder()
-					.AddJsonFile(appSettingJson)  // "appsettings.json"
-					.Build();
-
-				Log.Logger = new LoggerConfiguration()
-					.ReadFrom.Configuration(configuration)
-					.CreateLogger();
-				Log.Warning($"Inside {nameof(Program)}; testing that this message gets saved to the Serilog console and file sinks. ASPNETCORE_ENVIRONMENT: {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}");
-				try
-				{
-						Log.Information("Application Starting Up"); // Note 1
-						CreateHostBuilder(args).Build().Run();
-				}
-				catch (Exception ex)
-				{
-						Log.Fatal(ex, "The application failed to start correctly"); // Total fale
-				}
-				finally
-				{
-						Log.CloseAndFlush(); // Note 2
-				}
-		}
-		/*
-		Note 1: because we are in static void Main, we have to use the static keyword Log.Information not LogInformation
-		        i.e. we can't use the ILogger right now we must use the Serilog logger
-		Note 2: If you have any log messages that are pending, then this will make sure they are written.
-	 */
-
-		public static IHostBuilder CreateHostBuilder(string[] args) =>
-				Host.CreateDefaultBuilder(args)
-						.UseSerilog()
-						.ConfigureWebHostDefaults(webBuilder =>
-						{
-								webBuilder.UseStartup<Startup>();
-						});
-}
-
-```
-
-
-**ApplicationSettings.razor**
-- LivingMessiah.Web\Pages\Admin\Dashboard\ApplicationSettings.razor
-```html
-@using Microsoft.Extensions.Options
-@using LivingMessiah.Web.Settings
-
-@inject IOptions<AppSettings> AppSettings
-
-<p class="card-title">GoogleAnalytics: @AppSettings.Value.GoogleAnalytics</p>
-
-```
-
-
-**Index.razor.cs.cs**
+**Index.razor.cs**
 - LivingMessiah.Web\Pages\Calendar\
 - Get AppSettings.YearId
 ```csharp
@@ -177,25 +36,9 @@ using LivingMessiah.Web.Settings;
 		{
 				YearId = AppSettings.Value.YearId;
 				Logger.LogDebug(string.Format("Inside Page: {0}, Class!Method: {1}, YearId:{2}", Page.Index, nameof(Index) + "!" + nameof(OnInitializedAsync), YearId));
-
-
 ```
 
 
-**AppSettings.cs**
-- LivingMessiah.Web\Settings\
-```csharp
-public class AppSettings
-{
-		public int YearId { get; set; }
-		public string SiteShortTitle { get; set; }
-		public string SiteTitle { get; set; }
-		public string GoogleAnalytics { get; set; }
-		public bool ShabbatServiceLoadQuickly { get; set; }
-		public bool ShowCurrentWeeklyVideos { get; set; }
-}
-
-```
 
 
 ### Dapper and ConnectionString

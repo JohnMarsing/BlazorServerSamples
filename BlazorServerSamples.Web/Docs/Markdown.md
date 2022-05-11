@@ -90,7 +90,7 @@ Custom stylesheets
 
 **Shorthand**
 
- Syntax      | Description |
+ Syntax      | Description 
  ----------- | ----------- 
  Header      | Title       
  Paragraph   | Text        

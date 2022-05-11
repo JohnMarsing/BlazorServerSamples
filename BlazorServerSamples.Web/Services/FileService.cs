@@ -1,10 +1,12 @@
-﻿using BlazorServerSamples.Web.Domain;
+﻿namespace BlazorServerSamples.Web.Services;
+
+using BlazorServerSamples.Web.Domain;
+using BlazorServerSamples.Web.Settings;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
-
-namespace BlazorServerSamples.Web.Services;
+using Microsoft.Extensions.Options;
 
 public interface IFileService
 {
@@ -14,23 +16,30 @@ public interface IFileService
 
 public class FileService : IFileService
 {
+	#region Constructor and DI
 	private readonly IConfiguration _configuration;
-
-	public FileService(IConfiguration configuration)
+	private readonly ILogger Logger;
+	private readonly IOptions<SampleDataFiles> SampleDataFiles;
+	public FileService(IConfiguration configuration, ILogger<FileService> logger, IOptions<SampleDataFiles> sampleDataFiles)
 	{
 		_configuration = configuration;
+		Logger = logger;
+		SampleDataFiles = sampleDataFiles;
 	}
+	#endregion
 
+	// ToDo: put both of these in a Try Catch
+	// ToDo: Add tuples to handle returning the happy path or return an error
 	public string ReadFromFile()
 	{
-		return File.ReadAllText("sample-data//todoitems.json");  
-		//return File.ReadAllText(_configuration["SampleDataFile"]);  // Doesn't work
+		Logger.LogDebug(string.Format("Inside {0}", nameof(FileService) + "!" + nameof(ReadFromFile)));
+		return File.ReadAllText(SampleDataFiles.Value.ToDoItems);
 	}
 
 	public void SaveToFile(List<ToDoItem> toDoItems)
 	{
+		Logger.LogDebug(string.Format("Inside {0}", nameof(FileService) + "!" + nameof(SaveToFile)));
 		string json = JsonConvert.SerializeObject(toDoItems);
-		System.IO.File.WriteAllText("sample-data//todoitems.json", json);  
-		//System.IO.File.WriteAllText(_configuration["SampleDataFile"], json);  // Doesn't work
+		System.IO.File.WriteAllText(SampleDataFiles.Value.ToDoItems, json);	
 	}
 }

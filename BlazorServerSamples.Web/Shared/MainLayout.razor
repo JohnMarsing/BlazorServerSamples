@@ -4,7 +4,6 @@
 @inherits LayoutComponentBase
 @inject IOptions<AppSettings> AppSettings
 
-
 <PageTitle>Blazor Server Samples</PageTitle>
 
 <div class="page">
@@ -14,15 +13,15 @@
 
 	<main>
 		<div class="top-row px-4">
-			<a href="https://github.com/JohnMarsing" target="_blank">Github.com/JohnMarsing</a>
+			<a href="@AppSettings.Value.Github" target="_blank"><i class="bi bi-github"></i></a>
 		</div>
 
 		<article class="content px-4">
 			@Body
 		</article>
-		<footer class="text-muted mb-3">
+		<footer class="text-muted mt-3 mb-1">
 			<p class="text-center">
-				@DateTime.Now.Year @AppSettings.Value.SiteTitle | &copy;
+				<small><sup>@DateTime.Now.Year @AppSettings.Value.SiteTitle | @AppSettings.Value.Company &copy; all rights reserved.</sup></small>
 			</p>
 		</footer>
 	</main>

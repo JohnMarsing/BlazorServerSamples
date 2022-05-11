@@ -17,16 +17,22 @@ public interface IToDoService
 
 public class ToDoService : IToDoService
 {
+	#region Constructor and DI
 	private readonly IFileService _fileService;
 	private List<ToDoItem> _toDoItems;
+	private readonly ILogger Logger;
 
-	public ToDoService(IFileService fileService)
+
+	public ToDoService(IFileService fileService, ILogger<ToDoService> logger)
 	{
 		_fileService = fileService;
+		Logger = logger;
 	}
+	#endregion
 
 	public List<ToDoItem> Get()
 	{
+		Logger.LogDebug(string.Format("Inside {0}", nameof(ToDoService) + "!" + nameof(Get)));
 		string json = _fileService.ReadFromFile();
 		_toDoItems = JsonConvert.DeserializeObject<List<ToDoItem>>(json);
 		return _toDoItems;
