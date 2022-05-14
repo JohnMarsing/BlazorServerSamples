@@ -1,4 +1,4 @@
-﻿namespace BlazorServerSamples.Web.Data.SmartEnums;
+﻿namespace BlazorServerSamples.Web.SmartEnums;
 using Ardalis.SmartEnum;
 
 

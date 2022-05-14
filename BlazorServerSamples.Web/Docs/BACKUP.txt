@@ -1,0 +1,41 @@
+﻿
+
+	void Edit_ButtonClick(int? id)
+	{
+		NavigationManager.NavigateTo(Links.Admin.AudioVisual.Update.Index + "/" + id);
+	}
+
+
+	// This should be changed GetMissingYouTubeListOnly
+	private void UpdateYouTubeList()
+	{
+		foreach (var item in YouTubeList)
+		{
+			WeeklyVideoTable wvt = WeeklyVideoTableList.Find(x => x.YouTubeId == item.YouTubeId);
+
+			// This if is pointless because in the UI, I ignore those rows
+			// @foreach (var item in YouTubeList.Where(w => w.Id is null))
+			if (wvt is not null)
+			{
+				Logger.LogDebug(string.Format("... wvt is not null, wvt.Id: {0}", wvt.Id));
+				item.Id = wvt.Id;
+				item.Title = wvt.Title;
+				Logger.LogDebug(string.Format("...Item.Id: {0}; Item.Title: {1}", item.Id, item.Title));
+			}
+		}
+
+		if (YouTubeList is not null && YouTubeList.Any())
+		{
+			Logger.LogDebug(string.Format("... YouTubeList.Count before: {0}", YouTubeList.Count));
+			//YouTubeList = YouTubeList.Where(w => w.Id is null).ToList();
+			Logger.LogDebug(string.Format("... YouTubeList.Count after: {0}", YouTubeList.Count));
+		}
+	}
+
+
+		if (YouTubeList is not null && YouTubeList.Count == 0)
+		{
+
+			DatabaseWarning = true;
+			DatabaseWarningMsg = $"{nameof(YouTubeList)} Count is 0";
+		}

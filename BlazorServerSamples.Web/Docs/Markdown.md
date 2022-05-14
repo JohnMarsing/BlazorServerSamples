@@ -95,6 +95,10 @@ Custom stylesheets
  Header      | Title       
  Paragraph   | Text        
 
+ ```
+ :-: Center
+ --: Right align
+ ```
 
  ## Fonts
 - <font color="#FF0010">red</font>

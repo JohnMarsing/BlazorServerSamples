@@ -1,6 +1,5 @@
 ﻿@page "/About"
 @using Page = BlazorServerSamples.Web.Links.About
-@using PageBack = BlazorServerSamples.Web.Links.Home
 
 <PageTitle>@Page.Title</PageTitle>
 
@@ -8,14 +7,7 @@
 	<h2><i class="@Page.Icon"></i> @Page.Title</h2>
 </div>
 
-<div class="row d-print-none">
-	<div class="col-12">
-		<a href="@PageBack.Index"
-			 class="btn btn-info" title="Back to @PageBack.Title">
-			<i class="far fa-arrow-alt-circle-left"></i> Back to @PageBack.Title
-		</a>
-	</div>
-</div>
+<BackHomeButton />
 
 @code {
 

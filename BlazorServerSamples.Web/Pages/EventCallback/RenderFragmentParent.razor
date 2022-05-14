@@ -30,7 +30,7 @@
 </AlertBox>
 
 @code {
-	private string message;
+	private string message = String.Empty;
 	private void ShowMessage(MouseEventArgs e)
 	{
 		message = $"Blaze a new trail with Blazor! ({e.ScreenX}:{e.ScreenY})";

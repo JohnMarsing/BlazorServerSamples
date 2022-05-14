@@ -1,32 +1,43 @@
 ﻿namespace BlazorServerSamples.Web.Links;
 
+/*
+https://icons.getbootstrap.com/
+*/
+
 public static class Home
 {
 	public const string Index = "/";
 	public const string Title = "Blazor Server Samples Home Page";
 	public const string PageTitle = "Home | BSS";
-	public const string Icon = "fas fa-home";
+	public const string Icon = "bi bi-house"; // fas fa-home
 }
 
 public static class About
 {
 	public const string Index = "/About";
 	public const string Title = "About";
-	public const string Icon = "fas fa-info";
-}
-
-public static class Sitemap
-{
-	public const string Index = "/Sitemap";
-	public const string Title = "Sitemap";
-	public const string Icon = "fas fa-sitemap";
+	public const string Icon = "bi bi-info-circle"; // "fas fa-info";
 }
 
 public static class DashBoard
 {
 	public const string Index = "/Admin/Dashboard/Index";
 	public const string Title = "DashBoard";
-	public const string Icon = "fas fa-tachometer-alt";
+	public const string Icon = "bi bi-speedometer";  // fas fa-tachometer-alt
+}
+
+public static class MultiEditForm
+{
+	public const string Index = "/MultiEditForm";
+	public const string Title = "Multi EditForm";
+	public const string Icon = "bi bi-pencil-square";
+}
+
+public static class Sitemap
+{
+	public const string Index = "/Sitemap";
+	public const string Title = "Sitemap";
+	public const string Icon = "bi bi-diagram-3"; //"fas fa-sitemap";
 }
 
 // Nested example

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BlazorServerSamples.Web.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using BlazorServerSamples.Web.Pages.MultiEditForm;
 
 /*
 using Microsoft.IdentityModel.Tokens;
@@ -23,6 +24,8 @@ public static class ServiceCollectionExtensions
 			.AddSingleton<WeatherForecastService>()
 			.AddTransient<IFileService, FileService>()
 			.AddScoped<IToDoService, ToDoService>()
+			.AddTransient<IWeeklyVideosRepository, WeeklyVideosRepository>()
+			.AddSingleton<IYouTubeFeedService, YouTubeFeedService>()
 			.AddSingleton<ILinkService, LinkService>();
 
 		return services;

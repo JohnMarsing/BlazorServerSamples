@@ -2,7 +2,7 @@
 
 public class LinkBasic
 {
-	public string Index { get; set; }
-	public string Title { get; set; }
-	public string Icon { get; set; }
+	public string Index { get; set; } = String.Empty;
+	public string Title { get; set; } = String.Empty;
+	public string Icon { get; set; } = String.Empty;
 }

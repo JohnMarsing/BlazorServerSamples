@@ -1,4 +1,4 @@
-﻿# ToDo
+﻿# Catchall Notes
 
 ## Add a `GlobalUsings.cs` class
 - See https://gunnarpeipman.com/global-usings/

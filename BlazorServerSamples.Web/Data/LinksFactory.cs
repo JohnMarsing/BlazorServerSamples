@@ -37,6 +37,14 @@ public class LinksFactory : ILinksFactory
 					HomeSidebarUsage=true,
 					SitemapUsage=true
 				},
+					new Link
+				{
+					Index = MultiEditForm.Index,
+					Title = MultiEditForm.Title,
+					Icon = MultiEditForm.Icon,
+					HomeSidebarUsage=true,
+					SitemapUsage=true
+				},
 				new Link
 				{
 					Index = Sitemap.Index,

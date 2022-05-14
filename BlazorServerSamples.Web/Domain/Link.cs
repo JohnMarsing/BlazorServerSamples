@@ -2,10 +2,10 @@
 
 public class Link
 {
-	public string Index { get; set; }
-	public string Title { get; set; }
-	public string Icon { get; set; }
+	public string Index { get; set; } = String.Empty;
+	public string Title { get; set; } = String.Empty;
+	public string Icon { get; set; } = String.Empty;
 
 	public bool SitemapUsage { get; set; }
-	public bool HomeSidebarUsage { get; set; }
+	public bool HomeSidebarUsage { get; set; } 
 }

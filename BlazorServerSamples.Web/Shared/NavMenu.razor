@@ -29,12 +29,17 @@
 		</div>
 		<div class="nav-item px-3">
 			<NavLink class="nav-link" href="@About.Index">
-				<span class="@About.Icon" aria-hidden="true"></span> @About.Title
+				<i class="@About.Icon" aria-hidden="true"></i>@About.Title
 			</NavLink>
 		</div>
 		<div class="nav-item px-3">
 			<NavLink class="nav-link" href="@Sitemap.Index">
-				<span class="oi oi-list-rich" aria-hidden="true"></span> @Sitemap.Title
+				<i class="@Sitemap.Icon" aria-hidden="true"></i>@Sitemap.Title
+			</NavLink>
+		</div>
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="@MultiEditForm.Index">
+				<i class="@MultiEditForm.Icon" aria-hidden="true"></i>@MultiEditForm.Title
 			</NavLink>
 		</div>
 	</nav>
@@ -42,9 +47,7 @@
 
 @code {
 	private bool collapseNavMenu = true;
-
 	private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
 	private void ToggleNavMenu()
 	{
 		collapseNavMenu = !collapseNavMenu;

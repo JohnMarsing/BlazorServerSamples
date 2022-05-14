@@ -3,8 +3,8 @@
 
 
  Num.  | Done | Description 
- ----- |   | ----------- 
- 001   |  | AppSettings NoWorky       
+ ----- | :--:  | ----------- 
+ 001   | ✓ | AppSettings NoWorky       
  999   |  | XXXX    
  
 
