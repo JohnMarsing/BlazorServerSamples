@@ -7,18 +7,75 @@
 	<h2><i class="@Page.Icon"></i> @Page.Title</h2>
 </div>
 
+<h3>Manage YouTube Videos</h3>
+<p>
+	What are the steps to manage the YouTube videos used by LMM.
+	Need to identify the players and their roles.
+	Need to identify the db operations, YT service operations.
+	The <code>WeeklyVideo</code> table ultimately drives the <b>Upcoming Events</b> page.
+	@*MD / Mermaid Sequence Digram [see](https://mermaid-js.github.io/mermaid/#/./sequenceDiagram)*@
+</p>
 
-<TableTemplate Items="ShabbatWeekList">
+<h5>Weekly Process</h5>
+<ol>
+	<li>Ralphie uploads the graphic files</li>
+	<li>
+		<ul>
+			<li><code>WeeklyVideo!GraphicFile</code> is updated during a file upload to Azure Blob process.</li>
+			<li>A message is sent to Ward of the uploads</li>
+			<li>
+				This is only a weekly process if <code>WeeklyVideoTypeId</code> is <i>Main Service English</i> or <i>Main Service Spanish</i>.
+				If the graphic file used by the other to types, they the are changed when needed.
+				</li>.
+		</ul>
+	</li>
+	<li>Ward creates a <i>future</i> video on YouTube.</li>
+	<li>
+		<ul>
+			<li>This is a <i>background</i> manual process done outside the scope of this app.</li>
+			<li>The graphic used during this process is the one Ralphie created in the previous step.</li>
+		</ul>
+	</li>
+
+	<li>Ward adds to the <code>WeeklyVideo</code> table by assigning these values...</li>
+	<li>
+		<ul>
+			<li><code>YouTubeId</code> gotten by the YouTube Feed <code>https://www.youtube.com/feeds/videos.xml?channel_id=</code> </li>
+			<li><code>WeeklyVideoTypeId</code> gotten by <code>SmartEnum WeeklyVideoType</code> </li>
+			<li><code>ShabbatWeekId</code> gotten by  <code>WeeklyVideoTable</code> </li>
+		</ul>
+	</li>
+	<li>The presenters update their content (optional)</li>
+	<li>
+		<ul>
+			<li><code>WeeklyVideo!NotesFile</code> is updated during a file upload to Azure Blob process</li>
+			<li><code>WeeklyVideo!Book</code> and <code>WeeklyVideo!Chapter</code> are updated if <code>WeeklyVideoTypeId</code> is <i>In Depth Study</i> or <i>Torah Tuesday</i> </li>
+		</ul>
+	</li>
+</ol>
+
+
+<h3>WeeklyVideoTableList</h3>
+<TableTemplate Items="WeeklyVideoTableList">
 	<TableHeader>
 		<th class="text-info">Id</th>
-		<th class="text-primary">Shabbat Date</th>
+		<th class="text-primary">Shabbat Week (Id)</th>
+		<th class="text-primary">Weekly Video Type (Id)</th>
+		<th class="text-primary">YouTube Id</th>
 	</TableHeader>
 	<RowTemplate>
 		<td>@context.Id</td>
-		<td>@context.ShabbatDate.ToShortDateString()</td>
+		<td>@context.ShabbatDate.ToShortDateString() (@context.ShabbatWeekId)</td>
+		<td>@context.WeeklyVideoTypeDescr (@context.WeeklyVideoTypeId)</td>
+		<td>@context.YouTubeId</td>
 	</RowTemplate>
 </TableTemplate>
 
+<p class="mt-1">
+	<code>IX_WeeklyVideo_Unique: ShabbatWeekId ASC,	WeeklyVideoTypeId ASC</code>
+</p>
+
+<hr />
 
 <h4 class="mt-4 mb-2"><span class="badge badge-warning">YouTube Feed</span></h4>
 
@@ -26,79 +83,91 @@
 	@foreach (var item in WeeklyVideoAddVMList)
 	{
 
-@*		<a href="https://www.youtube.com/watch?v=@item.YouTubeId" target="_blank" title="@item.YouTubeId">
-			<img src='https://img.youtube.com/vi/@item.YouTubeId/mqdefault.jpg' class='mt-4' />
-			<br>@item.Title
-		</a>*@
-
-		<EditForm Model="item"
-						OnValidSubmit="HandleValidSubmit"
-						class="card card-body bg-light mt-1">
-			<DataAnnotationsValidator />
-			<ValidationSummary />
-
-			<div class="form-group row">
-
-				@if (ShabbatWeekList.Any())
-				{
-					<label for="shabbatWeekId" class="col-md-3 col-form-label">Shabbat Week Id:</label>
-					<div class="col-md-9">
-						<InputSelect id="shabbatWeekId" @bind-Value="item.ShabbatWeekId" class="form-control">
-							@foreach (var item in ShabbatWeekList)
-							{
-						<option value="@item.Id">@item.ShabbatDate.ToShortDateString() [@item.Id]</option>
-							}
-				</InputSelect>
-			</div>
-				}
-				else
-				{
-					<p class="text-warning">ShabbatWeekList is empty</p>
-				}
-			</div>
-
-			<div class="form-group row">
-				<label for="youTubeId" class="col-md-3 col-form-label">YouTube Id:</label>
-				<div class="col-md-9">
-					<InputText id="youTubeId" class="form-control" @bind-Value="item.YouTubeId" />
-					<ValidationMessage For="@(() => item.YouTubeId)" />
-				</div>
-			</div>
-
-			<div class="form-group row">
-				<label for="title" class="col-md-3 col-form-label">Title:</label>
-				<div class="col-md-9">
-					<InputText id="title" class="form-control" @bind-Value="item.Title" />
-					<ValidationMessage For="@(() => item.Title)" />
-				</div>
-			</div>
-
-			<div class="form-group row">
-				<label for="type" class="col-md-3 col-form-label">Type</label>
-				<div class="col-md-9">
-					<InputSelect id="type" @bind-Value="item.WeeklyVideoTypeId" class="form-control">
-						@foreach (var item in WeeklyVideoType.List.ToList())
-						{
-						<option value="@item.Value">@item.Name</option>
-						}
-				</InputSelect>
-			</div>
-
-		</div>
-
-
 		<div class="row">
-			<div class="col-sm-6">
-				<div class="form-group">
-					<button class="btn btn-success btn-md" type="submit">
-						<i class="fas fa-save"></i> Save
-					</button>
-				</div>
+			<div class="col-md-4">
+
+				<a href="https://www.youtube.com/watch?v=@item.YouTubeId" target="_blank" title="@item.YouTubeId | @item.Title">
+					<img src='https://img.youtube.com/vi/@item.YouTubeId/mqdefault.jpg'
+						 class='m-1 img-fluid border border-3' />
+
+					<br>@item.YouTubeId
+				</a>
 
 			</div>
-		</div>
+			<div class="col-md-8">
+				<EditForm Model="item"
+								class="card card-body bg-light my-2">
+					<DataAnnotationsValidator />
+					<ValidationSummary />
 
-	</EditForm>
+					<div class="form-group row">
+
+						@if (ShabbatWeekList.Any())
+						{
+							<label for="shabbatWeekId" class="col-md-3 col-form-label">Shabbat Week Id:</label>
+							<div class="col-md-9">
+								<InputSelect id="shabbatWeekId" @bind-Value="item.ShabbatWeekId" class="form-control">
+									@foreach (var item in ShabbatWeekList)
+									{
+								<option value="@item.Id">@item.ShabbatDate.ToShortDateString() [@item.Id]</option>
+									}
+						</InputSelect>
+					</div>
+						}
+						else
+						{
+							<p class="text-warning">ShabbatWeekList is empty</p>
+						}
+					</div>
+
+					<div class="form-group row">
+						<label for="youTubeId" class="col-md-3 col-form-label">YouTube Id:</label>
+						<div class="col-md-9">
+							<InputText id="youTubeId" class="form-control" @bind-Value="item.YouTubeId" />
+							<ValidationMessage For="@(() => item.YouTubeId)" />
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label for="title" class="col-md-3 col-form-label">Title:</label>
+						<div class="col-md-9">
+							<InputText id="title" class="form-control" @bind-Value="item.Title" />
+							<ValidationMessage For="@(() => item.Title)" />
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label for="type" class="col-md-3 col-form-label">Type</label>
+						<div class="col-md-9">
+							<InputSelect id="type" @bind-Value="item.WeeklyVideoTypeId" class="form-control">
+								@foreach (var item in WeeklyVideoType.List.ToList())
+								{
+								<option value="@item.Value">@item.Name</option>
+								}
+						</InputSelect>
+					</div>
+
+				</div>
+
+
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<button class="btn btn-success btn-md" onclick=@(() => HandleAddClick(item))>
+								<i class="fas fa-save"></i> Save
+							</button>
+						</div>
+
+					</div>
+				</div>
+
+			</EditForm>
+
+		</div>
+	</div>
+
+
+
 	}
 </LoadingComponent>
 

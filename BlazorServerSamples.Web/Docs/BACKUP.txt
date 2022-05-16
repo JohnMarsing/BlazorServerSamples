@@ -1,4 +1,13 @@
 ﻿
+@*					<button class="btn btn-success btn-md" type="submit">
+						<i class="fas fa-save"></i> Save
+					</button>
+
+					<button onclick=@(() => Message = "Button Clicked")>Add</button> 
+					<button @onclick="@(e => HandleAddClick(buttonNumber, 5 * buttonNumber))">Check</button>
+
+*@					
+
 
 	void Edit_ButtonClick(int? id)
 	{
@@ -32,10 +41,158 @@
 		}
 	}
 
+	protected async Task HandleValidSubmit()
+	{
+		Logger.LogDebug(string.Format("...{0}", nameof(Index) + "!" + nameof(HandleValidSubmit)));
+		DatabaseInformation = false;
+		DatabaseInformationMsg = "";
 
-		if (YouTubeList is not null && YouTubeList.Count == 0)
+		int newId = 0;
+		WeeklyVideoInsert dto = new WeeklyVideoInsert();
+		dto.ShabbatWeekId = vm.ShabbatWeekId;
+		dto.WeeklyVideoTypeId = vm.WeeklyVideoTypeId;
+		dto.YouTubeId = vm.YouTubeId;
+		dto.Title = vm.Title;
+		dto.Book = 0;
+		dto.Chapter = 0;
+
+		try
 		{
-
-			DatabaseWarning = true;
-			DatabaseWarningMsg = $"{nameof(YouTubeList)} Count is 0";
+			newId = await db.WeeklyVideoAdd(dto);
+			//StateHasChanged(); this didn't work, I wanted to update WeeklyVideoTableList bud it didn't work
+			//vm.ShabbatWeekId = 0;
+			vm.Title = "";
+			vm.YouTubeId = "";
 		}
+		catch (Exception ex)
+		{
+			DatabaseError = true;
+			DatabaseErrorMsg = $"Error inserting row in database";
+			Logger.LogError(ex, $"...{DatabaseErrorMsg}");
+		}
+
+		Logger.LogDebug(string.Format("...newId: {0}", newId));
+
+		DatabaseInformation = true;
+		DatabaseInformationMsg = $"Record Added; newId: {newId}";
+	}
+
+
+<TableTemplate Items="ShabbatWeekList">
+	<TableHeader>
+		<th class="text-info">Id</th>
+		<th class="text-primary">Shabbat Date</th>
+	</TableHeader>
+	<RowTemplate>
+		<td>@context.Id</td>
+		<td>@context.ShabbatDate.ToShortDateString()</td>
+	</RowTemplate>
+</TableTemplate>
+
+
+public interface IYouTubeFeedService
+{
+	Task<List<YouTubeFeedModel>> GetModel(string url, int take);
+	//List<YouTubeFeedModel> GetModel();
+}
+
+		//private readonly IWeeklyVideosRepository db;
+	private readonly ILogger Logger;
+
+	public YouTubeFeedService(
+		IWeeklyVideosRepository weeklyVideosRepository, ILogger<YouTubeFeedService> logger)
+	{
+		//db = weeklyVideosRepository;
+		Logger = logger;
+	}
+
+
+	public List<YouTubeFeedModel> GetModel()
+	{
+		List<YouTubeFeedModel> l = new();
+
+		l.Add(new YouTubeFeedModel()
+		{
+			Id = null,
+			YouTubeId = "YouTubeId1",
+			Title = "YouTube Id one",
+			PublishDate = new DateTime(2022, 04, 29)
+		});
+
+		l.Add(new YouTubeFeedModel()
+		{
+			Id = null,
+			YouTubeId = "YouTubeId2",
+			Title = "YouTube Id two",
+			PublishDate = new DateTime(2022, 05, 6)
+		});
+
+		l.Add(new YouTubeFeedModel()
+		{
+			Id = null,
+			YouTubeId = "YouTubeId3",
+			Title = "YouTube Id three",
+			PublishDate = new DateTime(2022, 05, 13)
+		});
+
+		return l;
+	}
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		Logger.LogDebug(string.Format("Inside {0}", nameof(Index) + "!" + nameof(OnInitialized)));
+		await PopulateShabbatWeek();
+
+		//YouTubeList = await Svc.GetModel(SocialMedia.YouTube.YouTubeFeed(), 5);
+		YouTubeList = Svc.GetModel();
+		
+		await PopulateWeeklyVideoTableList();
+		PopulateWeeklyVideoAddVMList();
+	}
+
+
+# Create WeeklyVideo
+CREATE TABLE [dbo].[WeeklyVideo](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[ShabbatWeekId] [int] NOT NULL,
+	[WeeklyVideoTypeId] [int] NOT NULL,
+	[YouTubeId] [nvarchar](50) NOT NULL,
+	[Title] [nvarchar](100) NOT NULL,
+	[GraphicFile] [nvarchar](100) NULL,
+	[NotesFile] [nvarchar](100) NULL,
+	[Book] [int] NOT NULL,
+	[Chapter] [int] NOT NULL,
+ CONSTRAINT [PK_WeeklyVideo] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[WeeklyVideo] ADD  DEFAULT ('') FOR [Title]
+GO
+
+ALTER TABLE [dbo].[WeeklyVideo] ADD  DEFAULT ((1)) FOR [Book]
+GO
+
+ALTER TABLE [dbo].[WeeklyVideo] ADD  DEFAULT ((1)) FOR [Chapter]
+GO
+
+ALTER TABLE [dbo].[WeeklyVideo]  WITH CHECK ADD  CONSTRAINT [FK_WeeklyVideo_ShabbatWeek] FOREIGN KEY([ShabbatWeekId])
+REFERENCES [dbo].[ShabbatWeek] ([Id])
+GO
+
+ALTER TABLE [dbo].[WeeklyVideo] CHECK CONSTRAINT [FK_WeeklyVideo_ShabbatWeek]
+GO
+
+ALTER TABLE [dbo].[WeeklyVideo]  WITH CHECK ADD  CONSTRAINT [FK_WeeklyVideo_WeeklyVideoType] FOREIGN KEY([WeeklyVideoTypeId])
+REFERENCES [dbo].[WeeklyVideoType] ([Id])
+GO
+
+ALTER TABLE [dbo].[WeeklyVideo] CHECK CONSTRAINT [FK_WeeklyVideo_WeeklyVideoType]
+GO
+
+---
+
+	public WeeklyVideoAddVM vm { get; set; } = new WeeklyVideoAddVM();

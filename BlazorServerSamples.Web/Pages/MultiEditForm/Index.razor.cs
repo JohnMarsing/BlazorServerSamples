@@ -17,24 +17,51 @@ public partial class Index
 	[Inject]
 	public ILogger<Index>? Logger { get; set; }
 	
-	public WeeklyVideoAddVM vm { get; set; } = new WeeklyVideoAddVM();
 	public List<WeeklyVideoAddVM> WeeklyVideoAddVMList { get; set; } = new List<WeeklyVideoAddVM>();
 
 	public List<ShabbatWeek>? ShabbatWeekList { get; set; }
 	public List<YouTubeFeedModel>? YouTubeList { get; set; }
 	public List<WeeklyVideoTable>? WeeklyVideoTableList { get; set; }
 
+	public bool IsLoading { get; set; } = true;
+	public bool InsufficientData { get; set; } = true;
+
+	#region Shabbat Week Lookup
+	private int WeekCount = 3;
+
+	private async Task PopulateShabbatWeek()
+	{
+		Logger.LogDebug(string.Format("Inside {0}; WeekCount:{1}", nameof(Index) + "!" + nameof(PopulateShabbatWeek), WeekCount));
+
+		try
+		{
+			ShabbatWeekList = await db.GetShabbatWeekList(WeekCount);
+
+			if (ShabbatWeekList is null)
+			{
+				DatabaseWarning = true;
+				DatabaseWarningMsg = $"{nameof(ShabbatWeekList)} NOT FOUND";
+			}
+
+		}
+		catch (Exception ex)
+		{
+			DatabaseError = true;
+			DatabaseErrorMsg = $"Error reading database";
+			Logger.LogError(ex, $"...{DatabaseErrorMsg}");
+		}
+	}
+
+	#endregion
+
 	protected override async Task OnInitializedAsync()
 	{
 		Logger.LogDebug(string.Format("Inside {0}", nameof(Index) + "!" + nameof(OnInitialized)));
 		await PopulateShabbatWeek();
-
-		//YouTubeList = await Svc.GetModel(SocialMedia.YouTube.YouTubeFeed(), 5);
-		YouTubeList = Svc.GetModel();
-		
+		YouTubeList = await Svc.GetModel(SocialMedia.YouTube.YouTubeFeed(), 5);
 		await PopulateWeeklyVideoTableList();
 		PopulateWeeklyVideoAddVMList();
-		//UpdateYouTubeList();
+		IsLoading = false;
 	}
 
 	private int _shabbatWeekId = 1;
@@ -64,7 +91,6 @@ public partial class Index
 	private async Task PopulateWeeklyVideoTableList()
 	{
 		Logger.LogDebug(string.Format("Inside {0}; WeekCount:{1}", nameof(Index) + "!" + nameof(PopulateWeeklyVideoTableList), WeekCount));
-
 		try
 		{
 			WeeklyVideoTableList = await db.GetWeeklyVideoTableList(5);
@@ -82,7 +108,6 @@ public partial class Index
 					DatabaseWarningMsg = $"{nameof(WeeklyVideoTableList)} Count is 0";
 				}
 			}
-
 		}
 		catch (Exception ex)
 		{
@@ -91,32 +116,28 @@ public partial class Index
 			Logger.LogError(ex, $"...{DatabaseErrorMsg}");
 		}
 	}
-
-
 	#region Events
 
-	protected async Task HandleValidSubmit()
+	protected async Task HandleAddClick(WeeklyVideoAddVM weeklyVideoAddVM)
 	{
-		Logger.LogDebug(string.Format("...{0}", nameof(Index) + "!" + nameof(HandleValidSubmit)));
+		Logger.LogDebug(string.Format("...{0}", nameof(Index) + "!" + nameof(HandleAddClick)));
 		DatabaseInformation = false;
 		DatabaseInformationMsg = "";
 
 		int newId = 0;
 		WeeklyVideoInsert dto = new WeeklyVideoInsert();
-		dto.ShabbatWeekId = vm.ShabbatWeekId;
-		dto.WeeklyVideoTypeId = vm.WeeklyVideoTypeId;
-		dto.YouTubeId = vm.YouTubeId;
-		dto.Title = vm.Title;
+		dto.ShabbatWeekId = weeklyVideoAddVM.ShabbatWeekId;
+		dto.WeeklyVideoTypeId = weeklyVideoAddVM.WeeklyVideoTypeId;
+		dto.YouTubeId = weeklyVideoAddVM.YouTubeId;
+		dto.Title = weeklyVideoAddVM.Title;
 		dto.Book = 0;
 		dto.Chapter = 0;
 
 		try
 		{
 			newId = await db.WeeklyVideoAdd(dto);
-			//StateHasChanged(); this didn't work, I wanted to update WeeklyVideoTableList bud it didn't work
-			//vm.ShabbatWeekId = 0;
-			vm.Title = "";
-			vm.YouTubeId = "";
+			weeklyVideoAddVM.Title = "";
+			weeklyVideoAddVM.YouTubeId = "";
 		}
 		catch (Exception ex)
 		{
@@ -129,38 +150,13 @@ public partial class Index
 
 		DatabaseInformation = true;
 		DatabaseInformationMsg = $"Record Added; newId: {newId}";
+
+		await PopulateWeeklyVideoTableList();
+		StateHasChanged(); // let's try this here
 	}
 
 	#endregion
 
-
-	#region Shabbat Week Lookup
-	private int WeekCount = 3;
-
-	private async Task PopulateShabbatWeek()
-	{
-		Logger.LogDebug(string.Format("Inside {0}; WeekCount:{1}", nameof(Index) + "!" + nameof(PopulateShabbatWeek), WeekCount));
-
-		try
-		{
-			ShabbatWeekList = await db.GetShabbatWeekList(WeekCount);
-
-			if (ShabbatWeekList is null)
-			{
-				DatabaseWarning = true;
-				DatabaseWarningMsg = $"{nameof(ShabbatWeekList)} NOT FOUND";
-			}
-
-		}
-		catch (Exception ex)
-		{
-			DatabaseError = true;
-			DatabaseErrorMsg = $"Error reading database";
-			Logger.LogError(ex, $"...{DatabaseErrorMsg}");
-		}
-	}
-
-	#endregion
 
 	#region ErrorHandling
 	private void InitializeErrorHandling()

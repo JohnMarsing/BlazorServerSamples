@@ -114,8 +114,30 @@ The key combination (Ctrl+K, Ctrl+Q is bound to command (Comment Selection) whic
 
 ---
 # Mermaid
+```mermaid
+graph TD
+    A[Hard] -->|Text| B(Round)
+    B --> C{Decision}
+    C -->|One| D[Result 1]
+    C -->|Two| E[Result 2]
+```
 
-https://mermaid-js.github.io/mermaid/#/README
+### Sequence Diagrams
+- `actor` doesn't work, need to use `participant`
+```mermaid
+sequenceDiagram
+    participant Alice
+    participant Bob
+    Alice->>John: Hello John, how are you?
+    loop Healthcheck
+        John->>John: Fight against hypochondria
+    end
+    Note right of John: Rational thoughts <br/>prevail!
+    John-->>Alice: Great!
+    John->>Bob: How about you?
+    Bob-->>John: Jolly good!
+```
+
 
 ### Graph
 ```mermaid
@@ -125,6 +147,26 @@ https://mermaid-js.github.io/mermaid/#/README
       B-->D;
       C-->D
 ```
+
+### Sequence Diagram2
+```mermaid
+sequenceDiagram
+    participant Alice
+    participant Bob
+    Alice->>Bob: Hi Bob
+    Bob->>Alice: Hi Alice
+```
+
+### ER Diagram NO WORK
+```mermaid
+erDiagram
+    CUSTOMER ||--o{ ORDER : places
+    ORDER ||--|{ LINE-ITEM : contains
+    CUSTOMER }|..|{ DELIVERY-ADDRESS : uses
+```
+
+[On-line Tool works](https://mermaid-js.github.io/mermaid-live-editor/edit#pako:eNpdz80KgzAMAOBXKTlPH6C3sfYguA3UDQa9BJttgrbSn8NQ330V3WU5JeFLSCZorSbgQE50-HI4KMNSnG51cz3Lis1zltmJXSuRCs7GHlvym9l6K5gnVhYXmRWNPCfUWhOwM_5v1TLneZJClsVdVo_sKEQl6zoNRE8eDjCQG7DT6ZppHVUQ3jSQAp5STU-MfVCgzJJoHDUGkroL1gF_Yu_pABiDrT-mBR5cpB_a_9rV8gVhMU18)
+
 
 # Epsilon Notes
 - [Search.brave.com epsilon notes](http://example.com)
