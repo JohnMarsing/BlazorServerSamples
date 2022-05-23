@@ -5,9 +5,9 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerSamples.Web", "BlazorServerSamples.Web\BlazorServerSamples.Web.csproj", "{A1700385-8757-464C-863F-BEED9628C1A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorServerSamples.Data", "BlazorServerSamples.Data\BlazorServerSamples.Data.csproj", "{76F930A3-79F3-4D49-8B7F-96D16994D84B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerSamples.Data", "BlazorServerSamples.Data\BlazorServerSamples.Data.csproj", "{76F930A3-79F3-4D49-8B7F-96D16994D84B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorServerSamples.Domain", "BlazorServerSamples.Domain\BlazorServerSamples.Domain.csproj", "{5CCFED1A-C3FC-46BC-A7E1-A5E3BA7E22DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerSamples.Domain", "BlazorServerSamples.Domain\BlazorServerSamples.Domain.csproj", "{5CCFED1A-C3FC-46BC-A7E1-A5E3BA7E22DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

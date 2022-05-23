@@ -1,0 +1,59 @@
+﻿@page "/BlazedFvMulti"
+@using BlazorServerSamples.Web.SmartEnums
+@using Page = BlazorServerSamples.Web.Links.BlazedFvMulti
+<PageTitle>@Page.Title</PageTitle>
+
+<div class="pb-2 mt-4 mb-3">
+	<h2><i class="@Page.Icon"></i> @Page.Title</h2>
+</div>
+
+	@foreach (var individual in People)
+	{
+		rowCnt += 1;
+		<h5 class="text-primary text-center mt-5 ">Person @rowCnt</h5>
+		<div class="card mb-3 border-info">
+			<div class="card-body">
+				<PersonEditForm person=@individual></PersonEditForm>
+			</div>
+		</div>
+	}
+
+@code {
+
+	int rowCnt = 0;
+
+	Person Person1 { get; set; } = new();
+	Person Person2 { get; set; } = new();
+	public List<Person> People { get; set; } = new List<Person>();
+
+
+	protected override void OnInitialized()
+	{
+		//Logger!.LogDebug(string.Format("Inside {0}", nameof(Index) + "!" + nameof(OnInitialized)));
+
+		Person1.FirstName = "Ted";
+		Person1.LastName = "Nugent";
+		Person1.Age = 65;
+		Person1.EmailAddress = "CatScratchFever@FeedBack.com";
+
+		Address add1 = new Address();
+		add1.Line1 = "1234 No Where St";
+		add1.Town = "Motor City";
+		Person1.Address = add1;
+
+		People.Add(Person1);
+
+
+		Person2.FirstName = "Alice";
+		Person2.LastName = "Cooper";
+		Person2.Age = 67;
+		Person2.EmailAddress = "Killer@MichaelBruce.com";
+
+		Address add2 = new Address();
+		add2.Line1 = "1234 No Where St";
+		add2.Town = "Motor City";
+		Person2.Address = add2;		
+
+		People.Add(Person2);
+	}
+}

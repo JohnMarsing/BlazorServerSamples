@@ -7,6 +7,8 @@ using BlazorServerSamples.Web.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using BlazorServerSamples.Web.Pages.MultiEditForm;
+using FluentValidation;
+using BlazorServerSamples.Web.Pages;
 
 /*
 using Microsoft.IdentityModel.Tokens;
@@ -25,6 +27,13 @@ public static class ServiceCollectionExtensions
 			.AddTransient<IFileService, FileService>()
 			.AddScoped<IToDoService, ToDoService>()
 			.AddTransient<IWeeklyVideosRepository, WeeklyVideosRepository>()
+
+			.AddTransient<IValidator<WeeklyVideoAddVM>, WeeklyVideoAddVMValidator>()
+
+			//ToDo Remove this
+			.AddTransient<IValidator<Person>, PersonValidator>()
+			.AddTransient<IValidator<Address>, AddressValidator>()
+
 			.AddSingleton<IYouTubeFeedService, YouTubeFeedService>()
 			.AddSingleton<ILinkService, LinkService>();
 

@@ -1,4 +1,60 @@
 ﻿
+# john-003-add-FluentValidation
+
+
+@if (People == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<p>NOT NECESSARY BECAUSE, IN THIS CASE, ITS ALREADY INSTANTIATED</p>
+}
+
+
+Add @using Blazored.FluentValidation to  _Imports.razor.
+
+Change from 
+  <EditForm Model="item" class="card card-body bg-light my-2"> <DataAnnotationsValidator />	<ValidationSummary />
+To
+ <EditForm Model="item" class="card card-body bg-light my-2"> <FluentValidationValidator  />	<ValidationSummary />
+
+Change  YouTubeId
+- Add  <input type="hidden" id="youTubeId" name="YouTubeId" value="@item.YouTubeId">
+- Remove
+```
+					<div class="form-group row">
+						<label for="youTubeId" class="col-md-3 col-form-label">YouTube Id:</label>
+						<div class="col-md-9">
+							<InputText id="youTubeId" class="form-control" @bind-Value="item.YouTubeId" />
+							<ValidationMessage For="@(() => item.YouTubeId)" />
+						</div>
+					</div>
+```
+
+
+namespace BlazorServerSamples.Web.Pages.MultiEditForm;
+using System.ComponentModel.DataAnnotations;
+
+public class WeeklyVideoAddVM
+{
+	[Required]
+	public int WeeklyVideoTypeId { get; set; }
+
+	[Required]
+	public int ShabbatWeekId { get; set; }
+
+	[Required]
+	[StringLength(11, MinimumLength = 3, ErrorMessage = "length {0} must be between {2} and {1}.")]
+	public string YouTubeId { get; set; } = String.Empty;
+
+	[Required]
+	public string Title { get; set; } = String.Empty;
+}
+
+
+---
+
 @*					<button class="btn btn-success btn-md" type="submit">
 						<i class="fas fa-save"></i> Save
 					</button>
@@ -7,6 +63,17 @@
 					<button @onclick="@(e => HandleAddClick(buttonNumber, 5 * buttonNumber))">Check</button>
 
 *@					
+
+
+/*
+- https://chrissainty.com/using-fluentvalidation-for-forms-validation-in-razor-components/
+  The `NotEmpty` validator means we're making all the properties required. 
+
+Building a form validator component
+	The first is a new validator component to use in place of the `DataAnnotationsValidator` which comes as default. 
+  Then we need to create an extension method for the `EditContext` which calls the validation logic from FluentValidation. 
+ 
+ */
 
 
 	void Edit_ButtonClick(int? id)

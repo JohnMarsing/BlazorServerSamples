@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Components;
+
+using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using BlazorServerSamples.Web.Domain;
 using Microsoft.Extensions.Logging;
 using BlazorServerSamples.Web.SmartEnums;
 using Blazored.FluentValidation;
 
+
 namespace BlazorServerSamples.Web.Pages.MultiEditForm;
 
-public partial class Index
+public partial class SingleEditForm
 {
 	[Inject]
 	public IYouTubeFeedService? Svc { get; set; }
@@ -16,9 +18,9 @@ public partial class Index
 	public IWeeklyVideosRepository? db { get; set; }
 
 	[Inject]
-	public ILogger<Index>? Logger { get; set; } 
-	
-	public List<WeeklyVideoAddVM> WeeklyVideoAddVMList { get; set; } = new List<WeeklyVideoAddVM>();
+	public ILogger<SingleEditForm>? Logger { get; set; }
+
+	public WeeklyVideoAddVM WeeklyVideoAddVM { get; set; } = new WeeklyVideoAddVM();
 
 	public List<ShabbatWeek>? ShabbatWeekList { get; set; }
 	public List<YouTubeFeedModel>? YouTubeList { get; set; }
@@ -29,7 +31,7 @@ public partial class Index
 	void ClickPartialValidate(string setName)
 	{
 		Logger!.LogDebug(string.Format("ClickPartialValidate for RuleSet {0}; result: {1}",
-			setName, _fluentValidationValidator?.Validate(options => options.IncludeRuleSets(setName)) ));
+			setName, _fluentValidationValidator?.Validate(options => options.IncludeRuleSets(setName))));
 	}
 
 	public bool IsLoading { get; set; } = true;
@@ -40,7 +42,7 @@ public partial class Index
 
 	private async Task PopulateShabbatWeek()
 	{
-		Logger.LogDebug(string.Format("Inside {0}; WeekCount:{1}", nameof(Index) + "!" + nameof(PopulateShabbatWeek), WeekCount));
+		Logger.LogDebug(string.Format("Inside {0}; WeekCount:{1}", nameof(SingleEditForm) + "!" + nameof(PopulateShabbatWeek), WeekCount));
 
 		try
 		{
@@ -65,41 +67,16 @@ public partial class Index
 
 	protected override async Task OnInitializedAsync()
 	{
-		Logger!.LogDebug(string.Format("Inside {0}", nameof(Index) + "!" + nameof(OnInitializedAsync)));
+		Logger!.LogDebug(string.Format("Inside {0}", nameof(SingleEditForm) + "!" + nameof(OnInitializedAsync)));
 		await PopulateShabbatWeek();
 		YouTubeList = await Svc.GetModel(SocialMedia.YouTube.YouTubeFeed(), 5);
 		await PopulateWeeklyVideoTableList();
-		PopulateWeeklyVideoAddVMList();
 		IsLoading = false;
 	}
 
-	private int _shabbatWeekId = 1;
-	private void PopulateWeeklyVideoAddVMList()
-	{
-		Logger.LogDebug(string.Format("...PopulateWeeklyVideoAddVMList Start"));
-
-		foreach (var item in YouTubeList)
-		{
-			WeeklyVideoTable wvt = WeeklyVideoTableList.Find(x => x.YouTubeId == item.YouTubeId);
-
-			if (wvt is null)
-			{
-				WeeklyVideoAddVMList.Add(new WeeklyVideoAddVM()
-				{
-					WeeklyVideoTypeId = WeeklyVideoType.MainServiceEnglish,
-					ShabbatWeekId = _shabbatWeekId,
-					Title = item.Title,
-					YouTubeId = item.YouTubeId,
-				});
-			}
-		}
-		Logger.LogDebug(string.Format("...PopulateWeeklyVideoAddVMList End"));
-	}
-
-
 	private async Task PopulateWeeklyVideoTableList()
 	{
-		Logger!.LogDebug(string.Format("Inside {0}; WeekCount:{1}", nameof(Index) + "!" + nameof(PopulateWeeklyVideoTableList), WeekCount));
+		Logger!.LogDebug(string.Format("Inside {0}; WeekCount:{1}", nameof(SingleEditForm) + "!" + nameof(PopulateWeeklyVideoTableList), WeekCount));
 		try
 		{
 			WeeklyVideoTableList = await db.GetWeeklyVideoTableList(5);
@@ -127,26 +104,26 @@ public partial class Index
 	}
 	#region Events
 
-	protected async Task HandleAddClick(WeeklyVideoAddVM weeklyVideoAddVM)
+	protected async Task HandleAddClick()
 	{
-		Logger.LogDebug(string.Format("...{0}", nameof(Index) + "!" + nameof(HandleAddClick)));
+		Logger.LogDebug(string.Format("...{0}", nameof(SingleEditForm) + "!" + nameof(HandleAddClick)));
 		DatabaseInformation = false;
 		DatabaseInformationMsg = "";
 
 		int newId = 0;
 		WeeklyVideoInsert dto = new WeeklyVideoInsert();
-		dto.ShabbatWeekId = weeklyVideoAddVM.ShabbatWeekId;
-		dto.WeeklyVideoTypeId = weeklyVideoAddVM.WeeklyVideoTypeId;
-		dto.YouTubeId = weeklyVideoAddVM.YouTubeId;
-		dto.Title = weeklyVideoAddVM.Title;
+		dto.ShabbatWeekId = WeeklyVideoAddVM.ShabbatWeekId;
+		dto.WeeklyVideoTypeId = WeeklyVideoAddVM.WeeklyVideoTypeId;
+		dto.YouTubeId = WeeklyVideoAddVM.YouTubeId;
+		dto.Title = WeeklyVideoAddVM.Title;
 		dto.Book = 0;
 		dto.Chapter = 0;
 
 		try
 		{
 			newId = await db.WeeklyVideoAdd(dto);
-			weeklyVideoAddVM.Title = "";
-			weeklyVideoAddVM.YouTubeId = "";
+			WeeklyVideoAddVM.Title = "";
+			WeeklyVideoAddVM.YouTubeId = "";
 		}
 		catch (Exception ex)
 		{

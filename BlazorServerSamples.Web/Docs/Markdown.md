@@ -114,6 +114,10 @@ The key combination (Ctrl+K, Ctrl+Q is bound to command (Comment Selection) whic
 
 ---
 # Mermaid
+- [Docs](https://mermaid-js.github.io/mermaid/#/)
+- [On-line Tool works](https://mermaid-js.github.io/mermaid-live-editor/edit#pako:eNpdz80KgzAMAOBXKTlPH6C3sfYguA3UDQa9BJttgrbSn8NQ330V3WU5JeFLSCZorSbgQE50-HI4KMNSnG51cz3Lis1zltmJXSuRCs7GHlvym9l6K5gnVhYXmRWNPCfUWhOwM_5v1TLneZJClsVdVo_sKEQl6zoNRE8eDjCQG7DT6ZppHVUQ3jSQAp5STU-MfVCgzJJoHDUGkroL1gF_Yu_pABiDrT-mBR5cpB_a_9rV8gVhMU18)
+- [CLI](https://github.com/mermaid-js/mermaid-cli)
+
 ```mermaid
 graph TD
     A[Hard] -->|Text| B(Round)
@@ -165,7 +169,19 @@ erDiagram
     CUSTOMER }|..|{ DELIVERY-ADDRESS : uses
 ```
 
-[On-line Tool works](https://mermaid-js.github.io/mermaid-live-editor/edit#pako:eNpdz80KgzAMAOBXKTlPH6C3sfYguA3UDQa9BJttgrbSn8NQ330V3WU5JeFLSCZorSbgQE50-HI4KMNSnG51cz3Lis1zltmJXSuRCs7GHlvym9l6K5gnVhYXmRWNPCfUWhOwM_5v1TLneZJClsVdVo_sKEQl6zoNRE8eDjCQG7DT6ZppHVUQ3jSQAp5STU-MfVCgzJJoHDUGkroL1gF_Yu_pABiDrT-mBR5cpB_a_9rV8gVhMU18)
+## [Lint](https://mermaid-js.github.io/mermaid/#/?id=lint) and [Test](https://mermaid-js.github.io/mermaid/#/?id=test)
+I seem to be have trouble with some of my mermaid objects, and was wondering if a lint process would help. Probably better to do **Test** instead.
+
+**Test**
+
+- `yarn test`
+- Manual test in browser: open dist/index.html
+  - what does this mean?
+
+  
+**Lint**
+
+- `yarn lint`
 
 
 # Epsilon Notes

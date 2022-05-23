@@ -33,6 +33,30 @@ public static class MultiEditForm
 	public const string Icon = "bi bi-pencil-square";
 }
 
+public static class SingleEditForm
+{
+	public const string Index = "/SingleEditForm";
+	public const string Title = "Single EditForm";
+	public const string Icon = "bi bi-pencil";
+}
+
+public static class BlazedFvSingle
+{
+	public const string Index = "/BlazedFvSingle";
+	public const string Title = "Blazed FluentValidation Person";
+	public const string SubTitle = "Blazed FV Person";
+	public const string Icon = "bi bi-bricks";
+}
+
+public static class BlazedFvMulti
+{
+	public const string Index = "/BlazedFvMulti";
+	public const string Title = "Blazed FluentValidation People";
+	public const string SubTitle = "Blazed FV People";
+	public const string Icon = "bi bi-bricks";
+}
+
+
 public static class Sitemap
 {
 	public const string Index = "/Sitemap";
