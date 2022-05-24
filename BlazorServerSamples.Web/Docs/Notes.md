@@ -2,6 +2,10 @@
 
 
 https://chrissainty.com/building-a-simple-tooltip-component-for-blazor-in-under-10-lines-of-code/
+https://chrissainty.com/auto-saving-form-data-in-blazor/
+https://chrissainty.com/building-custom-input-components-for-blazor-using-inputbase/
+https://chrissainty.com/page/2/
+
 
 ## Two Buttons on a Form
 ```html

@@ -54,10 +54,24 @@ public abstract class BaseRepositoryAsync
 		}
 		catch (SqlException ex)
 		{
-			errMsg = $"{GetType().FullName}.{nameof(WithConnectionAsync)} experienced a Sql Exception <br /><br /> Sql...<br />[{SqlDump}] <br /><br />";
+			/*
+			ToDo: Try to implement https://github.com/ardalis/Result or https://github.com/ardalis/DomainModeling
+			
+			if (ex.IsUniqueKeyViolation())
+			{
+
+			}
+			else
+			{
+
+			}
+			*/
+
+			errMsg = $"{GetType().FullName}.{nameof(WithConnectionAsync)} experienced a Sql Exception, Number: {ex.Number} <br /><br /> Sql...<br />[{SqlDump}] <br /><br />";
 			log.LogError(ex, errMsg);
 			if (ex.Message != null) { errMsg += "<br /> ex.Message:" + ex.Message; }
 			throw new Exception(errMsg, ex);
+
 		}
 		catch (InvalidOperationException ex)
 		{
@@ -65,6 +79,7 @@ public abstract class BaseRepositoryAsync
 			log.LogError(ex, errMsg);
 			throw new Exception(errMsg, ex);
 		}
+
 		catch (Exception ex)
 		{
 			errMsg = $"{GetType().FullName}.{nameof(WithConnectionAsync)} Generic Exception <br /><br /> Sql...<br />[{SqlDump}] <br /><br />";

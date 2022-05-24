@@ -5,8 +5,8 @@ using FluentValidation;
 
 public class WeeklyVideoAddVM
 {
-	public int WeeklyVideoTypeId { get; set; }
-	public int ShabbatWeekId { get; set; }
+	public int? WeeklyVideoTypeId { get; set; }
+	public int? ShabbatWeekId { get; set; }
 	public string YouTubeId { get; set; } = String.Empty;
 	public string Title { get; set; } = String.Empty;
 	//public BookChapter BookChapter { get; set; } = new();
@@ -28,10 +28,10 @@ public class WeeklyVideoAddVMValidator : AbstractValidator<WeeklyVideoAddVM>
 		RuleSet("Select", () =>
 		{
 			RuleFor(w => w.ShabbatWeekId)
-				.NotEmpty()
+				.NotNull()
 				.WithMessage("Shabbat Week can not be null");
 			RuleFor(w => w.WeeklyVideoTypeId)
-				.NotEmpty()
+				.NotNull()
 				.WithMessage("You must select a Weekly Video Type");
 			//RuleFor(w => w.ShabbatWeekId)
 			//	.NotEmpty().WithMessage("You must select a ShabbatWeekId");

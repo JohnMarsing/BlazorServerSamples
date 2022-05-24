@@ -2,10 +2,12 @@
 
  `#`  | Done | Description 
  ----- | :-: | ----------- 
- 003   |     | add FluentValidation
+ 004   |     | john-004-add-WeeklyVideoAddFormEdit
+ 003   | ✓  | add FluentValidation
  002   | ✓  | multi `EditForm`
  001   | ✓  | fix startup and app setting configuration
 
+ 
   
 ### 003
 

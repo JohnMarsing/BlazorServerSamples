@@ -112,8 +112,8 @@ public partial class SingleEditForm
 
 		int newId = 0;
 		WeeklyVideoInsert dto = new WeeklyVideoInsert();
-		dto.ShabbatWeekId = WeeklyVideoAddVM.ShabbatWeekId;
-		dto.WeeklyVideoTypeId = WeeklyVideoAddVM.WeeklyVideoTypeId;
+		dto.ShabbatWeekId = (int)WeeklyVideoAddVM.ShabbatWeekId;
+		dto.WeeklyVideoTypeId = (int)WeeklyVideoAddVM.WeeklyVideoTypeId;
 		dto.YouTubeId = WeeklyVideoAddVM.YouTubeId;
 		dto.Title = WeeklyVideoAddVM.Title;
 		dto.Book = 0;
