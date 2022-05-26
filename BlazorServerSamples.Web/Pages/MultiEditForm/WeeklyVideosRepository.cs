@@ -15,13 +15,13 @@ public interface IWeeklyVideosRepository
 
 	// Query 
 	Task<List<ShabbatWeek>> GetShabbatWeekList(int top);
-	Task<List<WeeklyVideoTable>> GetWeeklyVideoTableList(int top);
+		Task<List<WeeklyVideoTable>> GetWeeklyVideoByShabbatWeekId(int shabbatWeekId);
 	//Task<WeeklyVideoUpdateVM> GetWeeklyVideoById(int id);
 
-	//// Command
+	// Command
 	Task<int> WeeklyVideoAdd(WeeklyVideoInsert dto);
 	//Task<int> WeeklyVideoUpdate(WeeklyVideoUpdate dto);
-	//Task<int> WeeklyVideoDelete(int id);
+	Task<int> WeeklyVideoDelete(int id);
 }
 
 public class WeeklyVideosRepository : BaseRepositoryAsync, IWeeklyVideosRepository
@@ -56,10 +56,11 @@ ORDER BY ShabbatDate DESC
 		});
 	}
 
-	public async Task<List<WeeklyVideoTable>> GetWeeklyVideoTableList(int top = 9)
+	public async Task<List<WeeklyVideoTable>> GetWeeklyVideoByShabbatWeekId(int shabbatWeekId)
 	{
-		base.log.LogDebug(string.Format("Inside {0}, top={1}", nameof(WeeklyVideosRepository) + "!" + nameof(GetWeeklyVideoTableList), top));
-		Parms = new DynamicParameters(new { Top = top });
+		base.log.LogDebug(string.Format("Inside {0}, top={1}"
+			, nameof(WeeklyVideosRepository) + "!" + nameof(GetWeeklyVideoByShabbatWeekId), shabbatWeekId));
+		Parms = new DynamicParameters(new { ShabbatWeekId = shabbatWeekId });
 
 		Sql = $@"
 -- DECLARE @Top int = 3
@@ -71,11 +72,11 @@ SELECT
 ,	wv.YouTubeId
 , wv.Title
 --, LAG(wv.ShabbatWeekId, 1, 0) OVER (ORDER BY ShabbatDate DESC, tvf.WeeklyVideoTypeId) AS PrevShabbatWeekId
-FROM tvfShabbatWeekCrossWeeklyVideoTypeByTop(@Top) tvf
+FROM tvfShabbatWeekCrossWeeklyVideoTypeByTop(9) tvf
 LEFT OUTER JOIN WeeklyVideo wv 
 	ON tvf.ShabbatWeekId = wv.ShabbatWeekId AND
 	   tvf.WeeklyVideoTypeId = wv.WeeklyVideoTypeId
-WHERE wv.Id IS NOT NULL
+WHERE wv.Id IS NOT NULL AND wv.ShabbatWeekId = @ShabbatWeekId
 ORDER BY ShabbatDate DESC, tvf.WeeklyVideoTypeId
 ";
 		return await WithConnectionAsync(async connection =>
@@ -84,6 +85,8 @@ ORDER BY ShabbatDate DESC, tvf.WeeklyVideoTypeId
 			return rows.ToList();
 		});
 	}
+
+
 	#endregion
 
 	#region Command
@@ -118,6 +121,21 @@ VALUES (@ShabbatWeekId, @WeeklyVideoTypeId, @YouTubeId, @Title, @Book, @Chapter)
 		});
 
 
+	}
+
+
+	public async Task<int> WeeklyVideoDelete(int id)
+	{
+		base.log.LogDebug(string.Format("Inside {0}, id:{1}"
+			, nameof(WeeklyVideosRepository) + "!" + nameof(WeeklyVideoDelete), id));
+
+		base.Sql = "DELETE FROM WeeklyVideo WHERE Id = @id";
+		base.Parms = new DynamicParameters(new { Id = id });
+		return await WithConnectionAsync(async connection =>
+		{
+			var affectedrows = await connection.ExecuteAsync(sql: base.Sql, param: base.Parms);
+			return affectedrows;
+		});
 	}
 	#endregion
 

@@ -7,61 +7,72 @@
 	<h2><i class="@Page.Icon"></i> @Page.Title</h2>
 </div>
 
-<DesignNotes IsDesignCollapsed=true></DesignNotes>
-
-<h3>Weekly Video Table List</h3>
-<TableTemplate Items="WeeklyVideoTableList">
-	<TableHeader>
-		<th class="text-info">Id</th>
-		<th class="text-primary">Shabbat Week (Id)</th>
-		<th class="text-primary">Weekly Video Type (Id)</th>
-		<th class="text-primary">YouTube Id</th>
-	</TableHeader>
-	<RowTemplate>
-		<td>@context.Id</td>
-		<td>@context.ShabbatDate.ToShortDateString() (@context.ShabbatWeekId)</td>
-		<td>@context.WeeklyVideoTypeDescr (@context.WeeklyVideoTypeId)</td>
-		<td>@context.YouTubeId</td>
-	</RowTemplate>
-</TableTemplate>
-
-<p class="mt-1">
-	<code>IX_WeeklyVideo_Unique: ShabbatWeekId ASC,	WeeklyVideoTypeId ASC</code>
-</p>
-<hr />
-
-
-<h4 class="mt-4 mb-2"><span class="badge badge-warning">YouTube Feed</span></h4>
+<ShabbatWeekChooser OnShabbatWeekIdChosenCallback=ShabbatWeekIdChosenCallback />
 
 @if (DatabaseInformation)
 {
 	<p class="text-info">@DatabaseInformationMsg</p>
 }
 
-<LoadingComponent IsLoading="WeeklyVideoAddVMList==null ">
+@if (ShahbatWeekSelected)
+{
 
-	@foreach (var item in WeeklyVideoAddVMList!)
-	{
-		<div class="row">
-			<div class="col-md-4">
+	<LoadingComponent IsLoading="AddEditFormVMList==null ">
 
-				<a href="https://www.youtube.com/watch?v=@item.YouTubeId" target="_blank" title="@item.YouTubeId | @item.Title">
-					<img src='https://img.youtube.com/vi/@item.YouTubeId/mqdefault.jpg'
+		@foreach (var item in AddEditFormVMList!)
+		{
+			<div class="row">
+				<div class="col-md-4">
+
+					<a href="https://www.youtube.com/watch?v=@item.YouTubeId" target="_blank" title="@item.YouTubeId | @item.Title">
+						<img src='https://img.youtube.com/vi/@item.YouTubeId/mqdefault.jpg'
 						 class='m-1 img-fluid border border-3' />
 
-					<br><small>@item.YouTubeId</small>
-				</a>
+						<br><small>@item.YouTubeId</small>
+					</a>
 
+				</div>
+				<div class="col-md-8">
+					<WeeklyVideoAddEditForm vm=@item
+															OnWeeklyVideoInsertedCallback=WeeklyVideoInsertedCallback>
+					</WeeklyVideoAddEditForm>
+				</div>
 			</div>
-			<div class="col-md-8">
-				<WeeklyVideoAddEditForm 
-					vm=@item 
-					OnWeeklyVideoInsertedCallback=WeeklyVideoInsertedCallback>
-				</WeeklyVideoAddEditForm>
-			</div>
-		</div>
-	}
-</LoadingComponent>
+		}
+	</LoadingComponent>
+
+}
+
+
+@if (ShahbatWeekSelected)
+{
+	<h5 class="mt-5 text-center">Videos Previously Added</h5>
+	<TableTemplate Items="VideosPreviouslyAdded">
+		<TableHeader>
+			<th class="text-info">Id</th>
+			<th class="text-primary">Shabbat Week (Id)</th>
+			<th class="text-primary">Weekly Video Type (Id)</th>
+			<th class="text-primary">YouTube Id</th>
+			<th class="text-danger">Delete</th>
+		</TableHeader>
+		<RowTemplate>
+			<td>@context.Id</td>
+			<td>@context.ShabbatDate.ToShortDateString() (@context.ShabbatWeekId)</td>
+			<td>@context.WeeklyVideoTypeDescr (@context.WeeklyVideoTypeId)</td>
+			<td>@context.YouTubeId</td>
+			<td class="text-danger" @onclick=@(() => DeleteClick(@context.Id)) >
+				<i class="bi bi-trash"></i>
+			</td>
+		</RowTemplate>
+	</TableTemplate>
+
+@*
+	<p class="mt-1">
+		<code>IX_WeeklyVideo_Unique: ShabbatWeekId ASC,	WeeklyVideoTypeId ASC</code>
+	</p>
+	<hr />
+*@
+}
 
 @if (DatabaseError)
 {
@@ -74,5 +85,7 @@ else
 		<p class="text-warning">@DatabaseWarningMsg</p>
 	}
 }
+
+<DesignNotes IsDesignCollapsed=true></DesignNotes>
 
 <BackHomeButton />

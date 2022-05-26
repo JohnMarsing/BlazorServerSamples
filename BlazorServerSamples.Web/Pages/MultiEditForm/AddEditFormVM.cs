@@ -3,7 +3,7 @@
 using FluentValidation;
 
 
-public class WeeklyVideoAddVM
+public class AddEditFormVM
 {
 	public int? WeeklyVideoTypeId { get; set; }
 	public int? ShabbatWeekId { get; set; }
@@ -21,9 +21,9 @@ public class WeeklyVideoAddVM
 	*/
 }
 
-public class WeeklyVideoAddVMValidator : AbstractValidator<WeeklyVideoAddVM>
+public class AddEditFormVMValidator : AbstractValidator<AddEditFormVM>
 {
-	public WeeklyVideoAddVMValidator()
+	public AddEditFormVMValidator()
 	{
 		RuleSet("Select", () =>
 		{
@@ -44,7 +44,6 @@ public class WeeklyVideoAddVMValidator : AbstractValidator<WeeklyVideoAddVM>
 		});
 
 		/*
-		 
 			YouTubeId is a hidden field so I don't think I should have this rule...not sure
 				RuleFor(w => w.YouTubeId).Length(11).WithMessage("Must be 11 characters");
 				RuleFor(w => w.YouTubeId).NotEmpty().WithMessage("You must enter a YouTube Id");

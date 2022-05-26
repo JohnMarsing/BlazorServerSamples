@@ -10,7 +10,7 @@ using Blazored.FluentValidation;
 public partial class WeeklyVideoAddEditForm
 {
 	[Parameter]
-	public WeeklyVideoAddVM vm { get; set; }
+	public AddEditFormVM vm { get; set; }
 
 	[Parameter]
 	public EventCallback<int> OnWeeklyVideoInsertedCallback { get; set; }
@@ -22,45 +22,6 @@ public partial class WeeklyVideoAddEditForm
 	public ILogger<WeeklyVideoAddEditForm>? Logger { get; set; }
 
 	private FluentValidationValidator? _fluentValidationValidator;
-	
-	public List<ShabbatWeek>? ShabbatWeekList { get; set; }
-
-
-	protected override async Task OnInitializedAsync()
-	{
-		Logger!.LogDebug(string.Format("Inside {0}", nameof(WeeklyVideoAddEditForm) + "!" + nameof(OnInitializedAsync)));
-		await PopulateShabbatWeek();
-	}
-
-
-	#region Shabbat Week Lookup
-	private int WeekCount = 3;
-
-	private async Task PopulateShabbatWeek()
-	{
-		Logger!.LogDebug(string.Format("Inside {0}; WeekCount:{1}", nameof(WeeklyVideoAddEditForm) + "!" + nameof(PopulateShabbatWeek), WeekCount));
-
-		try
-		{
-			ShabbatWeekList = await db!.GetShabbatWeekList(WeekCount);
-
-			if (ShabbatWeekList is null)
-			{
-				DatabaseWarning = true;
-				DatabaseWarningMsg = $"{nameof(ShabbatWeekList)} NOT FOUND";
-			}
-
-		}
-		catch (Exception ex)
-		{
-			DatabaseError = true;
-			DatabaseErrorMsg = $"Error reading database";
-			Logger!.LogError(ex, $"...{DatabaseErrorMsg}");
-		}
-	}
-
-	#endregion
-
 
 	void ClickPartialValidate(string setName)
 	{
@@ -95,7 +56,7 @@ public partial class WeeklyVideoAddEditForm
 		}
 
 		Logger!.LogDebug(string.Format("...newId: {0}", newId));
-		await OnWeeklyVideoInsertedCallback.InvokeAsync(newId); // Call back
+		await OnWeeklyVideoInsertedCallback.InvokeAsync(newId); 
 	}
 
 	#region ErrorHandling
@@ -113,6 +74,5 @@ public partial class WeeklyVideoAddEditForm
 	protected string DatabaseErrorMsg { get; set; } = String.Empty;
 
 	#endregion
-
 
 }

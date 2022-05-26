@@ -33,12 +33,6 @@ public static class MultiEditForm
 	public const string Icon = "bi bi-pencil-square";
 }
 
-public static class SingleEditForm
-{
-	public const string Index = "/SingleEditForm";
-	public const string Title = "Single EditForm";
-	public const string Icon = "bi bi-pencil";
-}
 
 public static class BlazedFvSingle
 {

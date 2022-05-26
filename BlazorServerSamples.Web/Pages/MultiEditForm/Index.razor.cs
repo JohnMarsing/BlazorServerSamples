@@ -16,62 +16,45 @@ public partial class Index
 	public IWeeklyVideosRepository? db { get; set; }
 
 	[Inject]
-	public ILogger<Index>? Logger { get; set; } 
-	
-	public List<WeeklyVideoAddVM> WeeklyVideoAddVMList { get; set; } = new List<WeeklyVideoAddVM>();
+	public ILogger<Index>? Logger { get; set; }
 
-	public List<WeeklyVideoTable>? WeeklyVideoTableList { get; set; }
+	public List<AddEditFormVM> AddEditFormVMList { get; set; } = new List<AddEditFormVM>();
+
+	public List<WeeklyVideoTable>? VideosPreviouslyAdded { get; set; }
 
 	public List<YouTubeFeedModel>? YouTubeList { get; set; }
+
+	public bool ShahbatWeekSelected { get; set; } = false;
+	public int SelectedShabbatWeekId { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
 		Logger!.LogDebug(string.Format("Inside {0}", nameof(Index) + "!" + nameof(OnInitializedAsync)));
 		YouTubeList = await Svc.GetModel(SocialMedia.YouTube.YouTubeFeed(), 5);
-		await PopulateWeeklyVideoTableList();
-		PopulateWeeklyVideoAddVMList();
 	}
 
-	private void PopulateWeeklyVideoAddVMList()
+	protected async Task ShabbatWeekIdChosenCallback(int id)
 	{
-		Logger!.LogDebug(string.Format("...PopulateWeeklyVideoAddVMList Start"));
-
-		foreach (var item in YouTubeList)
-		{
-			WeeklyVideoTable wvt = WeeklyVideoTableList.Find(x => x.YouTubeId == item.YouTubeId);
-
-			if (wvt is null)
-			{
-				WeeklyVideoAddVMList.Add(new WeeklyVideoAddVM()
-				{
-					Title = item.Title,
-					YouTubeId = item.YouTubeId,
-				});
-			}
-		}
-		Logger!.LogDebug(string.Format("...PopulateWeeklyVideoAddVMList End"));
+		Logger!.LogDebug(string.Format("Inside {0}; shabbatWeek: {1}"
+			, nameof(Index) + "!" + nameof(ShabbatWeekIdChosenCallback), id));
+		ShahbatWeekSelected = true;
+		SelectedShabbatWeekId = id;
+		await PopulateVideosPreviouslyAdded();
+		PopulateAddEditFormVMList();
 	}
 
-
-	private async Task PopulateWeeklyVideoTableList()
+	private async Task PopulateVideosPreviouslyAdded()
 	{
-		Logger!.LogDebug(string.Format("Inside {0}", nameof(Index) + "!" + nameof(PopulateWeeklyVideoTableList)));
+		Logger!.LogDebug(string.Format("Inside {0}, SelectedShabbatWeekId:{1}"
+			, nameof(Index) + "!" + nameof(PopulateVideosPreviouslyAdded), SelectedShabbatWeekId));
 		try
 		{
-			WeeklyVideoTableList = await db.GetWeeklyVideoTableList(5);
+			VideosPreviouslyAdded = await db!.GetWeeklyVideoByShabbatWeekId(SelectedShabbatWeekId);
 
-			if (WeeklyVideoTableList is null)
+			if (VideosPreviouslyAdded is null)
 			{
 				DatabaseWarning = true;
-				DatabaseWarningMsg = $"{nameof(WeeklyVideoTableList)} NOT FOUND";
-			}
-			else
-			{
-				if (WeeklyVideoTableList.Count == 0)
-				{
-					DatabaseWarning = true;
-					DatabaseWarningMsg = $"{nameof(WeeklyVideoTableList)} Count is 0";
-				}
+				DatabaseWarningMsg = $"{nameof(VideosPreviouslyAdded)} NOT FOUND";
 			}
 		}
 		catch (Exception ex)
@@ -82,6 +65,31 @@ public partial class Index
 		}
 	}
 
+	private void PopulateAddEditFormVMList()
+	{
+		Logger!.LogDebug(string.Format("...PopulateWeeklyVideoAddVMList"));
+		AddEditFormVMList = new List<AddEditFormVM>();
+
+		if (YouTubeList is not null && VideosPreviouslyAdded is not null)
+		{
+			foreach (var item in YouTubeList)
+			{
+				WeeklyVideoTable wvt = VideosPreviouslyAdded!.Find(x => x.YouTubeId == item.YouTubeId);
+
+				if (wvt is null)
+				{
+					AddEditFormVMList.Add(new AddEditFormVM()
+					{
+						Title = item.Title,
+						YouTubeId = item.YouTubeId,
+						ShabbatWeekId = SelectedShabbatWeekId
+					}); ;
+				}
+			}
+		}
+		
+	}
+
 	protected async Task WeeklyVideoInsertedCallback(int newId)
 	{
 		Logger!.LogDebug(string.Format("Inside {0}; newId: {1}"
@@ -89,16 +97,19 @@ public partial class Index
 
 		DatabaseInformation = true;
 		DatabaseInformationMsg = $"Record Added; newId: {newId}";
-		await PopulateWeeklyVideoTableList();
-		WeeklyVideoAddVMList = new List<WeeklyVideoAddVM>();
-		PopulateWeeklyVideoAddVMList();
-		//StateHasChanged();
+		await PopulateVideosPreviouslyAdded();
+		PopulateAddEditFormVMList();
 	}
 
-	#region Events
-
-
-	#endregion
+	protected async Task DeleteClick(int id)
+	{
+		Logger!.LogDebug(string.Format("...{0}; id:{1}"
+			, nameof(DeleteClick), id));
+		int affectedRows = await db!.WeeklyVideoDelete(id);
+		Logger!.LogDebug(string.Format("...affectedRows: {0}", affectedRows));
+		await PopulateVideosPreviouslyAdded();
+		PopulateAddEditFormVMList();
+	}
 
 
 	#region ErrorHandling
@@ -118,7 +129,6 @@ public partial class Index
 	protected string DatabaseWarningMsg { get; set; } = String.Empty;
 	protected bool DatabaseError { get; set; } // = false; handled by InitializeErrorHandling
 	protected string DatabaseErrorMsg { get; set; } = String.Empty;
-
 
 	#endregion
 

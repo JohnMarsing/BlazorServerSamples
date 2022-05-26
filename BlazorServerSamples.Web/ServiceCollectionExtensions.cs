@@ -28,7 +28,7 @@ public static class ServiceCollectionExtensions
 			.AddScoped<IToDoService, ToDoService>()
 			.AddTransient<IWeeklyVideosRepository, WeeklyVideosRepository>()
 
-			.AddTransient<IValidator<WeeklyVideoAddVM>, WeeklyVideoAddVMValidator>()
+			.AddTransient<IValidator<AddEditFormVM>, AddEditFormVMValidator>()
 
 			//ToDo Remove this
 			.AddTransient<IValidator<Person>, PersonValidator>()
