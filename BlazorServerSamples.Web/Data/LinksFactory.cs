@@ -24,12 +24,12 @@ public class LinksFactory : ILinksFactory
 				new LinkBasic {Index = "/Admin/Dashboard/ThrowException", Title = "Throw Exception", Icon = "fas fa-bomb", },
  			};
 	}
-	
-		public List<Link> GetLinks()
-		{
-				return new List<Link>
+
+	public List<Link> GetLinks()
+	{
+		return new List<Link>
 			{
-					new Link
+				new Link
 				{
 					Index = About.Index,
 					Title = About.Title,
@@ -37,11 +37,19 @@ public class LinksFactory : ILinksFactory
 					HomeSidebarUsage=true,
 					SitemapUsage=true
 				},
-					new Link
+				new Link
 				{
-					Index = MultiEditForm.Index,
-					Title = MultiEditForm.Title,
-					Icon = MultiEditForm.Icon,
+					Index = BlazorServerSamples.Web.Links.Unobtrusive.Index,
+					Title = BlazorServerSamples.Web.Links.Unobtrusive.Title,
+					Icon = BlazorServerSamples.Web.Links.Unobtrusive.Icon,
+					HomeSidebarUsage=true,
+					SitemapUsage=true
+				},
+				new Link
+				{
+					Index = BlazorServerSamples.Web.Links.SmartEnums.Index,
+					Title = BlazorServerSamples.Web.Links.SmartEnums.Title,
+					Icon = BlazorServerSamples.Web.Links.SmartEnums.Icon,
 					HomeSidebarUsage=true,
 					SitemapUsage=true
 				},
@@ -56,6 +64,6 @@ public class LinksFactory : ILinksFactory
 
 
 			};
-		}
+	}
 
 }

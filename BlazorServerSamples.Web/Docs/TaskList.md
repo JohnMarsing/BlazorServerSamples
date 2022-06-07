@@ -2,6 +2,7 @@
 
  `#`  | Done | Description 
  ----- | :-: | ----------- 
+ 005   |     | john-006-remove-multieditform-add-prettyblazor
  005   |     | john-005-ShabbatWeek-Chooser 
  004   |     | john-004-add-WeeklyVideoAddFormEdit
  003   | ✓  | add FluentValidation

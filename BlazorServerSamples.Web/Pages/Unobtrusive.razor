@@ -1,0 +1,31 @@
+﻿@page "/Unobtrusive"
+@using BlazorServerSamples.Web.Domain.Bible
+
+@using Page = BlazorServerSamples.Web.Links.Unobtrusive
+
+<PageTitle>@Page.Title</PageTitle>
+<div class="pb-2 mt-4 mb-2 border-bottom">
+	<h2><i class="@Page.Icon"></i> @Page.Title</h2>
+</div>
+<h5>@Page.SubTitle</h5>
+
+<div class="card mb-3 border-warning">
+	<div class="card-header">
+		<h3 class="card-title text-center">PrettyBlazor Example <a href="https://github.com/hassanhabib/PrettyBlazor" target="_blank"><i class="bi bi-github"></i></a></h3>
+	</div>
+	<div class="card-header">
+		<h5 class="card-title text-center"><code>Iterations Items=..., Condition Evaluation=..., Match, NotMatch</code></h5>
+	</div>	<div class="card-body">
+		<Iterations Items="Book.List">
+			<Condition Evaluation="@(context.BookGroupEnum == BookGroupEnum.Torah)">
+				<Match>
+					<p class="text-primary">Torah: @context.Abrv</p>
+				</Match>
+				<NotMatch>
+					<p class="text-warning">Not Torah: @context.Abrv</p>
+				</NotMatch>
+			</Condition>
+		</Iterations>
+
+	</div>
+</div>

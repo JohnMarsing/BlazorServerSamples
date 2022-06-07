@@ -19,21 +19,6 @@ public static class About
 	public const string Icon = "bi bi-info-circle"; // "fas fa-info";
 }
 
-public static class DashBoard
-{
-	public const string Index = "/Admin/Dashboard/Index";
-	public const string Title = "DashBoard";
-	public const string Icon = "bi bi-speedometer";  // fas fa-tachometer-alt
-}
-
-public static class MultiEditForm
-{
-	public const string Index = "/MultiEditForm";
-	public const string Title = "Multi EditForm";
-	public const string Icon = "bi bi-pencil-square";
-}
-
-
 public static class BlazedFvSingle
 {
 	public const string Index = "/BlazedFvSingle";
@@ -50,6 +35,27 @@ public static class BlazedFvMulti
 	public const string Icon = "bi bi-bricks";
 }
 
+public static class DashBoard
+{
+	public const string Index = "/Admin/Dashboard/Index";
+	public const string Title = "DashBoard";
+	public const string Icon = "bi bi-speedometer";  // fas fa-tachometer-alt
+}
+
+public static class Unobtrusive
+{
+	public const string Index = "/Unobtrusive";
+	public const string Title = "Unobtrusive";
+	public const string SubTitle = "Example of unobtrusiveness in markup";
+	public const string Icon = "bi bi-emoji-smile";  // fas fa-tachometer-alt
+}
+
+public static class SmartEnums
+{
+	public const string Index = "/SmartEnums";
+	public const string Title = "SmartEnums";
+	public const string Icon = "bi bi-smartwatch";
+}
 
 public static class Sitemap
 {

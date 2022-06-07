@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using BlazorServerSamples.Web.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using BlazorServerSamples.Web.Pages.MultiEditForm;
 using FluentValidation;
 using BlazorServerSamples.Web.Pages;
 
@@ -26,17 +25,9 @@ public static class ServiceCollectionExtensions
 			.AddSingleton<WeatherForecastService>()
 			.AddTransient<IFileService, FileService>()
 			.AddScoped<IToDoService, ToDoService>()
-			.AddTransient<IWeeklyVideosRepository, WeeklyVideosRepository>()
-
-			.AddTransient<IValidator<AddEditFormVM>, AddEditFormVMValidator>()
-
-			//ToDo Remove this
-			.AddTransient<IValidator<Person>, PersonValidator>()
+				.AddTransient<IValidator<Person>, PersonValidator>()
 			.AddTransient<IValidator<Address>, AddressValidator>()
-
-			.AddSingleton<IYouTubeFeedService, YouTubeFeedService>()
 			.AddSingleton<ILinkService, LinkService>();
-
 		return services;
 	}
 
