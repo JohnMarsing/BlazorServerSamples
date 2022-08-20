@@ -1,0 +1,29 @@
+﻿
+<div class="row mb-3">
+	<div class="col-12"> 
+		<Button @onclick="@(e => ToggleButtonClick(IsCollapsed))"
+						class="btn-outline-info btn-lg float-end">
+			@ButtonLabel <i class='@Chevron'></i>
+		</Button>
+	</div>
+</div>
+
+
+
+@if (!IsCollapsed)
+{
+  <SettingsList />
+}
+
+@code {
+	[Parameter]
+	public string ButtonLabel { get; set; }  = String.Empty;
+	
+	public bool IsCollapsed { get; set; } = true;
+	public string Chevron  { get; set; } = "bi bi-chevron-down";  //  "fas fa-chevron-down"
+	protected void ToggleButtonClick(bool isCollapsed)
+	{
+		IsCollapsed = !isCollapsed;
+		Chevron = IsCollapsed ? "bi bi-chevron-down" : "bi bi-chevron-up"; //  "fas fa-chevron-down" : "fas fa-chevron-up"
+	}
+}

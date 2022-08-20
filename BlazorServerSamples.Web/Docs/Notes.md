@@ -6,6 +6,19 @@ https://chrissainty.com/auto-saving-form-data-in-blazor/
 https://chrissainty.com/building-custom-input-components-for-blazor-using-inputbase/
 https://chrissainty.com/page/2/
 
+## Two buttons with spaces
+```html
+<div class="row">
+  <div class="col-12 my-2">
+    <button type="button" @onclick="LogErrorTest_ButtonClick"	class="btn btn-danger btn-sm ">
+			<i class="fas fa-times"></i> Log Error Test
+    </button>
+    <button  @onclick="EmptyErrorLog_ButtonClick" class="btn btn-danger btn-sm">
+      <i class="fas fa-times"></i> Empty Log
+    </button>
+  </div>
+</div>
+```
 
 ## Two Buttons on a Form
 ```html

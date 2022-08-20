@@ -1,0 +1,15 @@
+﻿@page "/CascadingValue/SingleParameterIsFixedParameter"
+<h3>CascadingValue | SingleParameter</h3>
+
+<CascadingValue Value="@Fruit" IsFixed="true">
+    <FruitByType></FruitByType>
+</CascadingValue>
+
+<p>
+  It is more performant if the <code>CascadingValue</code> parameters are defined as <code>IsFixed="true"</code>
+  You can use this if you know your cascading value will never change?
+</p>
+
+@code {
+  string Fruit { get; set; } = "Peach";
+}

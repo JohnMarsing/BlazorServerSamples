@@ -1,6 +1,6 @@
 ﻿using Ardalis.SmartEnum;
 
-namespace BlazorServerSamples.Web.Domain.Bible;
+namespace BlazorServerSamples.Web.Enum.Bible;
 
 public enum BookGroupEnum
 {

@@ -1,0 +1,72 @@
+﻿@page "/CascadingValue/GrandFather"
+
+<h3>CascadingValue | Grand Parent</h3>
+
+<CascadingValue Value="@SomeValue">
+   <Father OnChildSomeValueChanged="@UpdateValue"></Father>
+<CascadingValue>
+
+  <p>
+    In fact, I think if you're passing object instances around as per the other updating example
+    , then you should probably ask yourself if a service might be a better option as well.
+  </p>
+  
+
+@code {
+   string SomeValue { get; set; } = "Initial Value";
+
+   void UpdateValue(string newValue)
+    {
+        SomeValue = newValue;
+        StateHasChanged();
+    }
+}
+
+
+
+
+<h3>Father</h3>
+
+@*<GrandSon OnSomeValueChanged="ChangeValue">
+<GrandSon>
+*@
+
+<GrandSon OnSomeValueChanged="ChangeValue"></GrandSon>
+
+<p>
+	<b>Q</b>. With the setup we have above
+	, how do we handle raising the OnSomeValueChanged event from the AnotherChildComponent to the Index component?
+	<br />
+	<b>A</b> The answer is we would probably have to declare an intermediate event on the ChildComponent as well.
+</p>
+
+
+	@code {
+		[Parameter] public Action<string> OnChildSomeValueChanged { get; set; }
+
+		private void ChangeValue(string newValue)
+		{
+			OnSomeChildValueChanged?.Invoke(newValue);
+		}
+	}
+
+
+
+
+
+
+
+<h3>Grand Son</h3>
+
+<p>@SomeValue</p>
+
+@code {
+	[CascadingParameter] string SomeValue { get; set; } = string.Empty;
+
+	[Parameter] public Action<string> OnSomeValueChanged { get; set; }
+
+	private void ChangeValue()
+	{
+		OnSomeValueChanged?.Invoke("New Value");
+	}
+}

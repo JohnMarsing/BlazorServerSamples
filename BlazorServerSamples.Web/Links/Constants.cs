@@ -42,6 +42,13 @@ public static class DashBoard
 	public const string Icon = "bi bi-speedometer";  // fas fa-tachometer-alt
 }
 
+public static class CascadingValue
+{
+	public const string Index = "/CascadingValue";
+	public const string Title = "Cascading Values";
+	public const string Icon = "bi bi-filter-right";  
+}
+
 public static class Unobtrusive
 {
 	public const string Index = "/Unobtrusive";

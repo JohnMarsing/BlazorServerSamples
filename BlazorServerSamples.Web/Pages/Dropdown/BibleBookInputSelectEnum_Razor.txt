@@ -1,5 +1,5 @@
 ﻿@page "/Dropdown/BibleBookInputSelectEnumNOWORKY"
-@using BlazorServerSamples.Web.Domain.Bible
+@using BlazorServerSamples.Web.Enum.Bible
 
 <h3>BibleBookInputSelectEnum</h3>
 

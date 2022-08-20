@@ -2,7 +2,7 @@
 
 REQUIRES InputSelectEnum, which requires Nuget Pkg Humanizer
 
-@using BlazorServerSamples.Web.Domain.Bible
+@using BlazorServerSamples.Web.Enum.Bible
 @using Microsoft.AspNetCore.Components
 
 

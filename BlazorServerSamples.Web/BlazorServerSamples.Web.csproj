@@ -28,4 +28,8 @@
     <ProjectReference Include="..\BlazorServerSamples.Domain\BlazorServerSamples.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SmartEnums\" />
+  </ItemGroup>
+
 </Project>

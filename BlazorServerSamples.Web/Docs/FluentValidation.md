@@ -235,3 +235,25 @@ vNext.BlazorComponents.FluentValidation |   6    | https://github.com/Liero/vNex
 
 
 ### ???
+
+# FluentValidation Notes
+
+## [PlaceHolders](https://docs.fluentvalidation.net/en/latest/configuring.html?highlight=string%20interpolation#placeholders)
+```csharp
+RuleFor(customer => customer.Surname).NotNull().WithMessage("Please ensure you have entered your {PropertyName}");
+```
+…and the value Surname will be inserted.
+
+## String Interpolation
+```csharp
+
+//Using constant in a custom message:
+RuleFor(customer => customer.Surname)
+  .NotNull()
+  .WithMessage(customer => string.Format("This message references some constant values: {0} {1}", "hello", 5))
+//Result would be "This message references some constant values: hello 5"
+
+RuleFor(customer => customer.Surname)
+  .NotNull()
+  .WithMessage(customer => $"This message references some other properties: Forename: {customer.Forename} Discount: {customer.Discount}");
+```

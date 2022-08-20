@@ -1,0 +1,20 @@
+﻿@page "/CascadingValue/MultiParameterByType"
+
+<h3>CascadingValue | MultiParameter By Type</h3>
+
+<CascadingValue Value="@FruitName">
+    <CascadingValue Value="@FruitCount">
+        <FruitByType></FruitByType>
+    </CascadingValue>
+</CascadingValue>
+
+@*
+Blazor will look at the type of the Name parameter and try and find a cascading value which matches. 
+In this case, it will match FruitName and bind Name to its value.
+*@
+
+
+@code {
+    string FruitName { get; set; } = "Apple";
+    int FruitCount { get; set; } = 111;
+}

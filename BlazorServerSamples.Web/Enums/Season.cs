@@ -1,6 +1,6 @@
 ﻿using Ardalis.SmartEnum;
 
-namespace BlazorServerSamples.Web.SmartEnums;
+namespace BlazorServerSamples.Web.Enums;
 
 public abstract class Season : SmartEnum<Season>
 {

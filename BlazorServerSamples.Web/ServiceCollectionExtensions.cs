@@ -3,7 +3,6 @@
 using BlazorServerSamples.Web.Services;
 using System;
 using System.Threading.Tasks;
-using BlazorServerSamples.Web.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
@@ -22,7 +21,6 @@ public static class ServiceCollectionExtensions
 	public static IServiceCollection AddDataStores(this IServiceCollection services)
 	{
 		services
-			.AddSingleton<WeatherForecastService>()
 			.AddTransient<IFileService, FileService>()
 			.AddScoped<IToDoService, ToDoService>()
 				.AddTransient<IValidator<Person>, PersonValidator>()

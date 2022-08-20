@@ -1,0 +1,16 @@
+﻿@page "/CascadingValue/MultiParameterByName"
+
+<h3>CascadingValue | MultiParameter By Name</h3>
+
+<CascadingValue Value="@FirstFruit" Name="FirstFruit">
+    <CascadingValue Value="@SecondFruit" Name="SecondFruit">
+        <FruitByName></FruitByName>
+    </CascadingValue>
+</CascadingValue>
+
+
+
+@code {
+    string FirstFruit { get; set; } = "Apple";
+    string SecondFruit { get; set; } = "Banana";
+}

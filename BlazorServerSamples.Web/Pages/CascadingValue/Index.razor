@@ -1,0 +1,43 @@
+﻿@page "/CascadingValue/"
+
+@using Page = BlazorServerSamples.Web.Links.CascadingValue
+
+<PageTitle>@Page.Title</PageTitle>
+<div class="pb-2 mt-4 mb-2 border-bottom">
+	<h2><i class="@Page.Icon"></i> @Page.Title</h2>
+</div>
+
+<p class="text-black-50 ml-3 text-end">
+	Understanding Cascading Values & Cascading Parameters using <code>CascadingValue</code> by Chris Sainty; see
+	<a href="https://chrissainty.com/understanding-cascading-values-and-cascading-parameters/">link</a>
+</p>
+
+<h3>CascadingValue Index</h3>
+
+<div class="card border-info mt-3">
+	<div class="card-header py-1 text-center">Examples of <code>CascadingValue</code></div>
+
+	<div class="card-body py-1">
+		<ul>
+			<li><a href='/CascadingValue/SingleParameter'>SingleParameter</a></li>
+			<li><a href='/CascadingValue/SingleParameterIsFixedParameter'>SingleParameterIsFixedParameter</a></li>
+			<li><a href='/CascadingValue/MultiParameterByType'>MultiParameterByType</a></li>
+			<li><a href='/CascadingValue/MultiParameterByName'>MultiParameterByName</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<p><b>Updating Cascade Value</b> updates only cascade <b>down</b> you can't update a value <b>from</b> a descendant.</p>
+
+<p><b>Using Events</b>
+	Use an event to trigger an update of the cascading value.
+</p>
+
+<p>
+	<b>Using Complex Types: </b>
+	Another option is to pass a complex type down instead of an individual property, a component instance for example.
+	Descendant components can then perform actions against the instance using its methods and bind to its properties.
+	<br />
+	Q. The question is, should we really be passing complex types around like this just to update a single property value?
+</p>
