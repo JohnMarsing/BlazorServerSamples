@@ -1,0 +1,76 @@
+﻿@page "/Parasha"
+@using Page = BlazorServerSamples.Web.Links.Parasha
+@using BlazorServerSamples.Web.SmartEnums
+<PageTitle>@Page.Title</PageTitle>
+
+<div class="pb-1 mt-4 mb-5">
+	<h2><i class="@Page.Icon"></i> @Page.Title</h2>
+</div>
+
+
+<LoadingComponent IsLoading="Parasha==null && DatabaseWarning==false">
+	<div class="@MediaQuery.XsOrSm.DivClass">
+		<div class="card bg-light text-center">
+			<div class="card-header">
+				<h3> <i class="@Page.Icon"></i> Current Parasha <sup><small># @Parasha.TriNum</small></sup></h3>
+			</div>
+
+			<div class="card-body">
+				<CurrentParasha Parasha="@Parasha"
+												CssUlClass="h5 mt-2"
+												CssUlStyle="list-style-type:none"
+												IsXsOrSm="true">
+				</CurrentParasha>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="@MediaQuery.MdOrLgOrXl.DivClass">
+		<div class="card bg-light">
+			<div class="card-header text-center">
+				<h3> <i class="@Page.Icon"></i> Current Parasha</h3>
+			</div>
+
+			<div class="card-body">
+				<CurrentParasha Parasha="@Parasha"
+												CssUlClass="fa-ul h5 mt-3"
+												CssUlStyle=""
+												IsXsOrSm="false">
+				</CurrentParasha>
+			</div>
+
+		</div>
+	</div>
+
+</LoadingComponent>
+
+@if (Parasha is not null)
+{
+	<div class="d-md-none">
+		<IndexTableToggle IsXsOrSm="true" BookId="@Parasha.BookId"></IndexTableToggle>
+	</div>
+
+	<div class="d-none d-md-block">
+		<IndexTableToggle IsXsOrSm="false" BookId="@Parasha.BookId"></IndexTableToggle>
+	</div>
+}
+@*else
+{
+	<p>cannot show details because Parasha is null</p>
+}*@
+
+
+@if (DatabaseError)
+{
+	<p class="text-danger"><em>@DatabaseErrorMsg</em></p>
+}
+else
+{
+	if (DatabaseWarning)
+	{
+		<p class="text-warning">@DatabaseWarningMsg</p>
+	}
+}
+
+

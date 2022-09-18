@@ -1,6 +1,6 @@
 
 # RegistrationService.cs
-- LivingMessiah.Web\Pages\SukkotAdmin\Registration\Services\RegistrationService.cs
+- BlazorServerSamples.Web\Pages\SukkotAdmin\Registration\Services\RegistrationService.cs
 
   public class RegistratationException : Exception
 
@@ -144,7 +144,7 @@
 ---
 
 # SukkotService.cs
-- LivingMessiah.Web\Services\SukkotService.cs
+- BlazorServerSamples.Web\Services\SukkotService.cs
 
 
 
@@ -152,13 +152,13 @@
 
 using System;
 using System.Threading.Tasks;
-using LivingMessiah.Web.Pages.Sukkot.CreateEdit;
+using BlazorServerSamples.Web.Pages.Sukkot.CreateEdit;
 using SukkotApi.Domain;
 using SukkotApi.Domain.Enums;
-using LivingMessiah.Web.Pages.Sukkot;
-using LivingMessiah.Web.Pages.Sukkot.Constants;
-using LivingMessiah.Web.Infrastructure;
-using LivingMessiah.Web.Services;
+using BlazorServerSamples.Web.Pages.Sukkot;
+using BlazorServerSamples.Web.Pages.Sukkot.Constants;
+using BlazorServerSamples.Web.Infrastructure;
+using BlazorServerSamples.Web.Services;
 using Microsoft.Extensions.Logging;
 using SukkotApi.Data;
 using Microsoft.AspNetCore.Mvc;

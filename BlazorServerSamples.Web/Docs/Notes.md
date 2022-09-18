@@ -80,14 +80,14 @@ global using Microsoft.AspNetCore.Mvc.RazorPages;
 
 
 **Index.razor.cs**
-- LivingMessiah.Web\Pages\Calendar\
+- BlazorServerSamples.Web\Pages\Calendar\
 - Get AppSettings.YearId
 ```csharp
 
 public partial class Index
 {
 using Microsoft.Extensions.Options;
-using LivingMessiah.Web.Settings;
+using BlazorServerSamples.Web.Settings;
 
     [Inject]
     public IOptions<AppSettings> AppSettings { get; set; }
@@ -121,7 +121,7 @@ namespace LivingMessiah.Data;
 
 public abstract class BaseRepositoryAsync
 {
-  const string configationConnectionKey = "ConnectionStrings:LivingMessiah"; // Found in LivingMessiah.Web!appSetting.json
+  const string configationConnectionKey = "ConnectionStrings:LivingMessiah"; // Found in BlazorServerSamples.Web!appSetting.json
 
   private readonly IConfiguration config;
   protected readonly ILogger log;
@@ -170,13 +170,13 @@ public abstract class BaseRepositoryAsync
 ```
 
 ### Example of a Repository implementing `BaseRepositoryAsync.cs`
-- LivingMessiah.Web\Pages\Admin\AudioVisual\WeeklyVideosRepository.cs
+- BlazorServerSamples.Web\Pages\Admin\AudioVisual\WeeklyVideosRepository.cs
 
 **`WeeklyVideosRepository.cs`**
 ```csharp
 using LivingMessiah.Data;
 
-namespace LivingMessiah.Web.Pages.Admin.AudioVisual;
+namespace BlazorServerSamples.Web.Pages.Admin.AudioVisual;
 
 public interface IWeeklyVideosRepository
 {
@@ -226,7 +226,7 @@ SELECT
 
 **`ServiceCollectionExtensions.cs`**
 ```csharp
-namespace LivingMessiah.Web;
+namespace BlazorServerSamples.Web;
 public static class ServiceCollectionExtensions
 {
   public static IServiceCollection AddDataStores(this IServiceCollection services)
@@ -240,8 +240,8 @@ public static class ServiceCollectionExtensions
 
 
 
-### `LivingMessiah.Web.csproj` references LivingMessiah.Data.csproj
-- LivingMessiah.Web\LivingMessiah.Web.csproj
+### `BlazorServerSamples.Web.csproj` references LivingMessiah.Data.csproj
+- BlazorServerSamples.Web\BlazorServerSamples.Web.csproj
 ```
   <ItemGroup>
     <ProjectReference Include="..\LivingMessiah.Data\LivingMessiah.Data.csproj" />

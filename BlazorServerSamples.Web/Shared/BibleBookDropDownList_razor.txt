@@ -55,7 +55,7 @@ REQUIRES InputSelectEnum, which requires Nuget Pkg Humanizer
 	<input @oninput="OnPasswordChanged" value="@Password" />
 
 	BibleBookDropDownList @bind-bgEnum="bgGroupEnumParent" />
-		InvalidOperationException: Object of type 'LivingMessiah.Web.Pages.BlazorExamples.Components
+		InvalidOperationException: Object of type 'BlazorServerSamples.Web.Pages.BlazorExamples.Components
 			.BibleBookDropDownList' does not have a property matching the name 'bgEnumChanged'.
 			*/
 

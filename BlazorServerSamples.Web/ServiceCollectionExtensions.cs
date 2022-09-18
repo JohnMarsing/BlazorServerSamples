@@ -1,5 +1,6 @@
 ﻿namespace BlazorServerSamples.Web;
 
+using BlazorServerSamples.Data;
 using BlazorServerSamples.Web.Services;
 using System;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
 using BlazorServerSamples.Web.Pages;
+using BlazorServerSamples.Web.Pages.BlazoredToast.Parasha;
 
 /*
 using Microsoft.IdentityModel.Tokens;
@@ -23,8 +25,9 @@ public static class ServiceCollectionExtensions
 		services
 			.AddTransient<IFileService, FileService>()
 			.AddScoped<IToDoService, ToDoService>()
-				.AddTransient<IValidator<Person>, PersonValidator>()
+			.AddTransient<IValidator<Person>, PersonValidator>()
 			.AddTransient<IValidator<Address>, AddressValidator>()
+			.AddSingleton<IShabbatWeekRepository, ShabbatWeekRepository>()
 			.AddSingleton<ILinkService, LinkService>();
 		return services;
 	}

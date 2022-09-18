@@ -1,0 +1,18 @@
+﻿
+<div class="card mt-2 @CardCss" style="width: 100%">
+	<div class="card-header h3 px-2">
+		<span class='badge @HeaderBadgeColor pb-15'>@Title</span>
+
+		<button @onclick="@(e => ToggleButtonClick(IsCollapsed))"
+						class="btn-primary btn-sm float-end">
+			@ButtonText <i class='@ButtonChevron'></i>
+		</button>
+
+	</div>
+
+</div>
+
+@if (!IsCollapsed)
+{
+  <IndexTable IsXsOrSm="@IsXsOrSm" BookId="@BookId"></IndexTable>
+}

@@ -49,19 +49,24 @@ public static class CascadingValue
 	public const string Icon = "bi bi-filter-right";  
 }
 
-public static class Unobtrusive
+public static class Parasha
 {
-	public const string Index = "/Unobtrusive";
-	public const string Title = "Unobtrusive";
-	public const string SubTitle = "Example of unobtrusiveness in markup";
-	public const string Icon = "bi bi-emoji-smile";  // fas fa-tachometer-alt
-}
+	public const string Index = "/Parasha";
+	public const string Title = "Parasha";
+	public const string Icon = "bi bi-book"; // "fas fa-torah";
+	public const string IconCurrent = "bi bi-bookmark"; // "far fa-bookmark";
 
-public static class SmartEnums
-{
-	public const string Index = "/SmartEnums";
-	public const string Title = "SmartEnums";
-	public const string Icon = "bi bi-smartwatch";
+	public const string IndexPrint = "/Parasha/IndexPrint";
+	//public const string TitlePrint = "Parashot - Living Messiah"
+
+	public static class MyHebrewBible
+	{
+		private const string baseUrl = "https://myhebrewbible.com/Parasha/Triennial/LivingMessiah/";
+		public static string ParashaUrl(int id, string slug)
+		{
+			return $"{baseUrl}/{id}?slug={slug}/";
+		}
+	}
 }
 
 public static class Sitemap
@@ -71,6 +76,20 @@ public static class Sitemap
 	public const string Icon = "bi bi-diagram-3"; //"fas fa-sitemap";
 }
 
+public static class SmartEnums
+{
+	public const string Index = "/SmartEnums";
+	public const string Title = "SmartEnums";
+	public const string Icon = "bi bi-smartwatch";
+}
+
+public static class Unobtrusive
+{
+	public const string Index = "/Unobtrusive";
+	public const string Title = "Unobtrusive";
+	public const string SubTitle = "Example of unobtrusiveness in markup";
+	public const string Icon = "bi bi-emoji-smile";  // fas fa-tachometer-alt
+}
 // Nested example
 public static class PayPal
 {
