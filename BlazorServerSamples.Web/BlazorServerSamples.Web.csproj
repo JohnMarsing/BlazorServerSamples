@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Ardalis.SmartEnum" Version="2.1.0" />
     <PackageReference Include="Blazored.FluentValidation" Version="2.0.3" />
+    <PackageReference Include="Blazored.Toast" Version="3.2.2" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="PrettyBlazor" Version="1.2.0" />
@@ -26,10 +27,6 @@
   <ItemGroup>
     <ProjectReference Include="..\BlazorServerSamples.Data\BlazorServerSamples.Data.csproj" />
     <ProjectReference Include="..\BlazorServerSamples.Domain\BlazorServerSamples.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\BlazoredToast\Parasha\Domain\" />
   </ItemGroup>
 
 </Project>

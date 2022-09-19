@@ -1,14 +1,14 @@
 ﻿@page "/Parasha"
 @using Page = BlazorServerSamples.Web.Links.Parasha
 @using BlazorServerSamples.Web.SmartEnums
+
 <PageTitle>@Page.Title</PageTitle>
 
 <div class="pb-1 mt-4 mb-5">
 	<h2><i class="@Page.Icon"></i> @Page.Title</h2>
 </div>
 
-
-<LoadingComponent IsLoading="Parasha==null && DatabaseWarning==false">
+<LoadingComponent IsLoading="Parasha==null" TurnSpinnerOff="@TurnSpinnerOff">
 	<div class="@MediaQuery.XsOrSm.DivClass">
 		<div class="card bg-light text-center">
 			<div class="card-header">
@@ -29,7 +29,7 @@
 	<div class="@MediaQuery.MdOrLgOrXl.DivClass">
 		<div class="card bg-light">
 			<div class="card-header text-center">
-				<h3> <i class="@Page.Icon"></i> Current Parasha</h3>
+				<h3><i class="@Page.Icon"></i> Current Parasha</h3>
 			</div>
 
 			<div class="card-body">
@@ -55,22 +55,9 @@
 		<IndexTableToggle IsXsOrSm="false" BookId="@Parasha.BookId"></IndexTableToggle>
 	</div>
 }
-@*else
+@*
+	BookId="@Parasha.BookId"
+	else
 {
 	<p>cannot show details because Parasha is null</p>
 }*@
-
-
-@if (DatabaseError)
-{
-	<p class="text-danger"><em>@DatabaseErrorMsg</em></p>
-}
-else
-{
-	if (DatabaseWarning)
-	{
-		<p class="text-warning">@DatabaseWarningMsg</p>
-	}
-}
-
-

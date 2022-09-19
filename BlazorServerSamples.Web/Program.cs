@@ -1,10 +1,11 @@
-namespace BlazorServerSamples.Web;
 
 using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+
+namespace BlazorServerSamples.Web;
 
 public class Program
 {

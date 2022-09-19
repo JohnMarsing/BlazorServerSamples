@@ -7,16 +7,13 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 
-
 namespace BlazorServerSamples.Data;
-
 
 public interface IShabbatWeekRepository
 {
 	string BaseSqlDump { get; }
 	Task<Parasha> GetCurrentParashaAndChildren();
 	Task<Tuple<BibleBook, List<ParashaList>>> GetParashotByBookId(int bookId);
-	Task<Tuple<BibleBook, List<ParashaList>>> GetParashotForCurrentBook();
 }
 
 public class ShabbatWeekRepository : BaseRepositoryAsync, IShabbatWeekRepository
@@ -97,35 +94,5 @@ ORDER BY Id
 		});
 
 	}
-
-	public async Task<Tuple<BibleBook,
-					List<ParashaList>>> GetParashotForCurrentBook()
-	{
-		base.Sql = $@"
-SELECT Id, Abrv, Title AS EnglishTitle, HebrewTitle, HebrewName 
-FROM Bible.Book
-WHERE Id = (SELECT BookId FROM Bible.vwParasha WHERE ShabbatDate = dbo.udfGetNextShabbatDate())
-
-SELECT
-Id
-, ROW_NUMBER() OVER(PARTITION BY BookId ORDER BY Id ) AS RowCntByBookId
-, BookId, Torah, Name, TriNum, ParashaName
-, NameUrl, AhavtaURL, Meaning, IsNewBook, Haftorah, Brit
-, ShabbatDate
-, BaseParashaUrl, CurrentParashaUrl
-FROM Bible.vwParasha
-WHERE BookId = (SELECT BookId FROM Bible.vwParasha WHERE ShabbatDate = dbo.udfGetNextShabbatDate())
-ORDER BY Id
-
-";
-		return await WithConnectionAsync(async connection =>
-		{
-			var multi = await connection.QueryMultipleAsync(sql: base.Sql);
-			var book = await multi.ReadAsync<BibleBook>();
-			var parashot = await multi.ReadAsync<ParashaList>();
-			return new Tuple<BibleBook, List<ParashaList>>(book.SingleOrDefault(), parashot.ToList());
-		});
-	}
-
 
 }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Blazored.Toast;
 
 public class Startup
 {
@@ -33,6 +34,7 @@ public class Startup
 
 		services.AddDataStores();
 		services.AddSession();
+		services.AddBlazoredToast();
 		//services.AddCustomAuthentication(Configuration);
 		services.Configure<AppSettings>(options => Configuration.GetSection("AppSettings").Bind(options));
 		services.Configure<SampleDataFiles>(options => Configuration.GetSection("SampleDataFiles").Bind(options));
