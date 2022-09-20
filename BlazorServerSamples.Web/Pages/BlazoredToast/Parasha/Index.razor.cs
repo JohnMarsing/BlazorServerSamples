@@ -3,15 +3,15 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Page = BlazorServerSamples.Web.Links.Parasha;
-using BlazorServerSamples.Data;
 using Blazored.Toast.Services;
+using BlazorServerSamples.Web.Pages.BlazoredToast.Parasha.Data;
 
 namespace BlazorServerSamples.Web.Pages.BlazoredToast.Parasha;
 
 public partial class Index
 {
 	[Inject]
-	private IShabbatWeekRepository db { get; set; }
+	private IParashaRepository db { get; set; }
 
 	[Inject]
 	public ILogger<Index> Logger { get; set; }
@@ -19,7 +19,7 @@ public partial class Index
 	[Inject]
 	public IToastService toast { get; set; }
 
-	protected BlazorServerSamples.Domain.Parasha Parasha;
+	protected CurrentParasha? CurrentParasha;
 
 	protected bool TurnSpinnerOff = false;
 
@@ -29,13 +29,13 @@ public partial class Index
 
 		try
 		{
-			Parasha = await db.GetCurrentParashaAndChildren();
-			Logger.LogDebug(string.Format("...After calling {0}; Parasha: {1}", nameof(db.GetCurrentParashaAndChildren), Parasha));
+			CurrentParasha = await db.GetCurrentParasha();
+			Logger.LogDebug(string.Format("...After calling {0}; CurrentParasha: {1}", nameof(db.GetCurrentParasha), CurrentParasha));
 
-			if (Parasha is not null)
+			if (CurrentParasha is not null)
 			{
 				//toast.ShowInfo("Parasha gotten from the Database");
-				Logger.LogDebug(string.Format("...Parasha gotten from DATABASE, Parasha: {0}", Parasha));
+				Logger.LogDebug(string.Format("...Parasha gotten from DATABASE, Parasha: {0}", CurrentParasha));
 			}
 			else
 			{

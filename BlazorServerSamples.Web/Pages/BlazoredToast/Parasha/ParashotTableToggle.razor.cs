@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace BlazorServerSamples.Web.Pages.BlazoredToast.Parasha;
 
-public partial class IndexTableToggle
+public partial class ParashotTableToggle
 {
 	[Parameter]
 	public string CardCss { get; set; } = "border-primary my-3";
