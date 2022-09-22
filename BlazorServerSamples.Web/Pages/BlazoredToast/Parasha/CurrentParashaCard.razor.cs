@@ -5,7 +5,7 @@ namespace BlazorServerSamples.Web.Pages.BlazoredToast.Parasha;
 public partial class CurrentParashaCard
 {
 	[Parameter]
-	public CurrentParasha CurrentParasha { get; set; }
+	public CurrentParasha? CurrentParasha { get; set; }
 
 	[Parameter]
 	public bool IsXsOrSm { get; set; }

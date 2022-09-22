@@ -9,6 +9,7 @@ using FluentValidation;
 using BlazorServerSamples.Web.Pages;
 using BlazorServerSamples.Web.Pages.BlazoredToast.Parasha;
 using BlazorServerSamples.Web.Pages.BlazoredToast.Parasha.Data;
+using BlazorServerSamples.Web.Pages.BlazoredToast.Parasha.Services;
 
 /*
 using Microsoft.IdentityModel.Tokens;
@@ -28,6 +29,7 @@ public static class ServiceCollectionExtensions
 			.AddTransient<IValidator<Person>, PersonValidator>()
 			.AddTransient<IValidator<Address>, AddressValidator>()
 			.AddSingleton<IParashaRepository, ParashaRepository>()
+			.AddScoped<IParashaService, ParashaService>()
 			.AddSingleton<ILinkService, LinkService>();
 		return services;
 	}

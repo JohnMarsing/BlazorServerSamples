@@ -1,5 +1,5 @@
 ﻿@page "/Unobtrusive"
-@using BlazorServerSamples.Web.Enum.Bible
+@using BlazorServerSamples.Web.Enums
 
 @using Page = BlazorServerSamples.Web.Links.Unobtrusive
 
@@ -16,7 +16,7 @@
 	<div class="card-header">
 		<h5 class="card-title text-center"><code>Iterations Items=..., Condition Evaluation=..., Match, NotMatch</code></h5>
 	</div>	<div class="card-body">
-		<Iterations Items="Book.List">
+		<Iterations Items="BibleBook.List.OrderBy(x => x.Value)">
 			<Condition Evaluation="@(context.BookGroupEnum == BookGroupEnum.Torah)">
 				<Match>
 					<p class="text-primary">Torah: @context.Abrv</p>

@@ -4,20 +4,20 @@ using System.Threading.Tasks;
 using System;
 using Microsoft.Extensions.Logging;
 using Blazored.Toast.Services;
-using BlazorServerSamples.Web.Pages.BlazoredToast.Parasha.Data;
+using BlazorServerSamples.Web.Pages.BlazoredToast.Parasha.Services;
 
 namespace BlazorServerSamples.Web.Pages.BlazoredToast.Parasha;
 
 public partial class ParashotTable
 {
+	[Inject]
+	private IParashaService Service { get; set; }
+
 	[Inject] 
 	public ILogger<ParashotTable>? Logger { get; set; }
 	
 	[Inject]
-	private IParashaRepository db { get; set; }
-	
-	[Inject]
-	public IToastService toast { get; set; }
+	public IToastService Toast { get; set; }
 
 	protected IReadOnlyList<Parashot> Parashot;
 
@@ -34,33 +34,37 @@ public partial class ParashotTable
 
 	protected override async Task OnInitializedAsync()
 	{
-		Logger!.LogDebug(string.Format("Inside: {0}, Class!Method: {1}; BookId{2}"
+		Logger!.LogDebug(string.Format("Inside: {0}, Class!Method: {1}; BookId: {2}"
 			, "BlazoredToast.Parasha", nameof(ParashotTable) + "!" + nameof(OnInitializedAsync), BookId));
 
 		Colspan = (!IsXsOrSm) ? "8" : "6";
+
 		try
 		{
-			Parashot = await db.GetParashotByBookId(BookId);
-			Logger!.LogDebug(string.Format("...After calling {0}", nameof(db.GetParashotByBookId)));
-			if (Parashot is not null)
+			Parashot = await Service.GetParashotByBookId(BookId);
+			//Logger!.LogDebug(string.Format("...just called service.{0}; BookId: {1}"
+			//	, nameof(Service.GetParashotByBookId), BookId));
+
+			if (Parashot is null || !Parashot.Any())
 			{
-				Logger!.LogDebug(string.Format("... Data gotten from DATABASE"));
+				Toast.ShowWarning(Service.UserInterfaceMessage);
 			}
-			else
-			{
-				toast.ShowWarning($"{nameof(Parashot)} NOT FOUND");
-				Logger!.LogWarning(string.Format("...Parasha NOT found"));
-			}
+
 		}
-		catch (Exception ex)
+		//catch (ParashaService.ParashotListNotFoundException parashotListNotFoundException)
+		//{
+		//	Toast.ShowWarning(parashotListNotFoundException.Message);
+		//}
+
+		catch (InvalidOperationException invalidOperationException)
 		{
-			toast.ShowError($"Error reading database; {nameof(db.GetParashotByBookId)}");
-			Logger!.LogError(ex, string.Format("...Exception reading database"));
+			Toast.ShowError(invalidOperationException.Message);
 		}
 		finally
 		{
 			TurnSpinnerOff = true;
 		}
+
 	}
 
 	public static string CurrentReadDateTextFormat(DateTime readDate)
@@ -80,7 +84,7 @@ public partial class ParashotTable
 	public static string MyHebrewBibleParashaUrl(int id, string url)
 	{
 		string url2 = !String.IsNullOrEmpty(url) ? url : "";
-		return "https://myhebrewbible.com/BlazoredToast.Parasha/Triennial/LivingMessiah/" + id.ToString() + "?slug=" + url2;
+		return "https://myhebrewbible.com/Parasha/Triennial/LivingMessiah/" + id.ToString() + "?slug=" + url2;
 	}
 
 }

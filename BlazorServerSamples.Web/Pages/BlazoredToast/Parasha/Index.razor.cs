@@ -2,22 +2,22 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using Page = BlazorServerSamples.Web.Links.Parasha;
 using Blazored.Toast.Services;
-using BlazorServerSamples.Web.Pages.BlazoredToast.Parasha.Data;
+using BlazorServerSamples.Web.Pages.BlazoredToast.Parasha.Services;
+using Page = BlazorServerSamples.Web.Links.Parasha;
 
 namespace BlazorServerSamples.Web.Pages.BlazoredToast.Parasha;
 
 public partial class Index
 {
 	[Inject]
-	private IParashaRepository db { get; set; }
+	private IParashaService Service { get; set; }
 
 	[Inject]
 	public ILogger<Index> Logger { get; set; }
 
 	[Inject]
-	public IToastService toast { get; set; }
+	public IToastService Toast { get; set; }
 
 	protected CurrentParasha? CurrentParasha;
 
@@ -29,25 +29,16 @@ public partial class Index
 
 		try
 		{
-			CurrentParasha = await db.GetCurrentParasha();
-			Logger.LogDebug(string.Format("...After calling {0}; CurrentParasha: {1}", nameof(db.GetCurrentParasha), CurrentParasha));
+			CurrentParasha = await Service.GetCurrentParasha();
 
-			if (CurrentParasha is not null)
+			if (CurrentParasha is null || !String.IsNullOrEmpty(Service.UserInterfaceMessage) )
 			{
-				//toast.ShowInfo("Parasha gotten from the Database");
-				Logger.LogDebug(string.Format("...Parasha gotten from DATABASE, Parasha: {0}", CurrentParasha));
+				Toast.ShowWarning(Service.UserInterfaceMessage);
 			}
-			else
-			{
-				toast.ShowWarning($"Could not load because Current Parasha Unknown");
-				Logger.LogWarning(string.Format("...Parasha NOT found"));
-			}
-
 		}
-		catch (Exception ex)
+		catch (InvalidOperationException invalidOperationException)
 		{
-			toast.ShowError($"Error reading database");
-			Logger.LogError(ex, string.Format("...Exception reading database"));
+			Toast.ShowError(invalidOperationException.Message);
 		}
 		finally
 		{

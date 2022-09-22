@@ -87,7 +87,7 @@ public static class Unobtrusive
 {
 	public const string Index = "/Unobtrusive";
 	public const string Title = "Unobtrusive";
-	public const string SubTitle = "Example of unobtrusiveness in markup";
+	public const string SubTitle = "Example of unobtrusiveness in markup using Pretty Blazor";
 	public const string Icon = "bi bi-emoji-smile";  // fas fa-tachometer-alt
 }
 // Nested example
