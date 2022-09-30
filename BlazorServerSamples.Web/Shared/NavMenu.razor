@@ -11,9 +11,22 @@
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
 	<nav class="flex-column">
+
 		<div class="nav-item px-3">
 			<NavLink class="nav-link" href="" Match="NavLinkMatch.All">
 				<span class="oi oi-home" aria-hidden="true"></span> Home
+			</NavLink>
+		</div>
+
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="@SearchTypeahead.Index">
+				<i class="@SearchTypeahead.Icon" aria-hidden="true"></i>@SearchTypeahead.Title
+			</NavLink>
+		</div>
+
+		<div class="nav-item px-3">
+			<NavLink class="nav-link" href="@NavigationSearch.Index">
+				<i class="@NavigationSearch.Icon" aria-hidden="true"></i>@NavigationSearch.Title
 			</NavLink>
 		</div>
 
@@ -130,5 +143,5 @@
 	private bool expandSubNavEventCallback;
 	private bool expandSubNavNotYetDone;
 
-	private bool expandSubNavInline;
+	//private bool expandSubNavInline;
 }

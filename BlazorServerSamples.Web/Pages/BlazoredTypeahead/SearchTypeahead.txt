@@ -1,0 +1,137 @@
+﻿
+using BlazorServerSamples.Web.Enums;
+using Microsoft.AspNetCore.Components;
+
+namespace BlazorServerSamples.Web.Pages.BlazoredTypeahead;
+
+public partial class SearchTypeahead
+{
+	private BibleBook? SelectedBook;
+
+	private async Task<IEnumerable<BibleBook>> SearchBibleBooks(string searchText)
+	{
+		return await Task.FromResult(BibleBook.List
+			.Where(x => x.Title.ToLower().Contains(searchText.ToLower()))
+			.OrderBy(o => o.Value));
+	}
+
+
+	private List<Chapter> Chapters = new List<Chapter>();
+	//private Chapter? selectedResult;
+	[Parameter] public Chapter? selectedResult {get; set; }
+
+// private async Task<IEnumerable<Result>> SearchPeople(string searchText)
+//private async Task<IEnumerable<BibleBook>> SearchBibleBooks2(string searchText)
+private async Task<IEnumerable<Chapter>> SearchBibleBooks2(string searchText)
+	{
+		//var search = await client.SearchPerson(searchText);
+		var search = await SearchBibleBooks(searchText);
+		foreach (var item in search)
+		{
+			Chapters.Add(new Chapter() { BibleBook = item });
+		}
+		return Chapters;
+	}
+
+	//private async Task SelectedResultChanged(Result result)
+	//{
+	//	selectedResult = result;
+	//	movieCredits = await client.GetPersonMovieCredits(result.Id);
+	//}
+
+
+	private async Task SelectedResultChanged(Chapter result)
+	{
+		if (result == null)
+		{
+			return;
+		}
+		selectedResult = result;
+		//movieCredits = await client.GetPersonMovieCredits(result.Id);
+
+		//for (int i = 1; i <= selectedResult.BibleBook.LastChapter; i++)
+		//{
+		//	Chapters.Add(new Chapter() { BibleBook = result });
+		//}
+
+
+	}
+}
+
+
+
+
+
+@page "/SearchTypeahead"
+@using Page = BlazorServerSamples.Web.Links.SearchTypeahead
+@using BlazorServerSamples.Web.Enums;
+<PageTitle>@Page.Title</PageTitle>
+
+<div class="pb-1 mt-4 mb-5">
+	<h1><i class="@Page.Icon"></i> @Page.Title</h1>
+</div>
+
+
+<EditForm Model="MyFormModel" OnValidSubmit="HandlValidSubmit">
+    <BlazoredTypeahead SearchMethod="SearchFilms"
+                            @bind-Value="MyFormModel.SelectedFilm">
+        <SelectedTemplate>
+            @context.Title
+        </SelectedTemplate>
+        <ResultTemplate>
+            @context.Title (@context.Year)
+        </ResultTemplate>
+    </BlazoredTypeahead>
+    <ValidationMessage For="@(() => MyFormModel.SelectedFilm)" />
+</EditForm>
+
+@*
+<BlazoredTypeahead SearchMethod="SearchBibleBooks"
+                   @bind-Value="SelectedBook"
+                   ShowDropDownOnFocus="true" 
+                   placeholder="Search by book...">
+    <SelectedTemplate Context="book">
+        @book.Title
+    </SelectedTemplate>
+    <ResultTemplate Context="book">
+        @book.Title @book.TransliterationInHebrew
+    </ResultTemplate>
+</BlazoredTypeahead>
+
+<hr />
+ *@
+
+ @*
+   Should it be...
+   ValueChanged="@( (Result s) => SelectedResultChanged(s) )" 
+   or...
+   ValueChanged="SelectedResultChanged" 
+ *@
+
+ @*
+<BlazoredTypeahead SearchMethod="SearchBibleBooks2"
+                   TValue="Chapter"
+                   TItem="Chapter"
+                   Value="selectedResult"
+                   ValueChanged="@( (Chapter s) => SelectedResultChanged(s) )" 
+                   ValueExpression="@(() => selectedResult)"
+                   placeholder="Search by name...">
+     <SelectedTemplate>
+        @context.BibleBook.Title
+    </SelectedTemplate>
+    <ResultTemplate>
+        @context.BibleBook.Title <strong> (Id: @context.BibleBook.Abrv) </strong>
+    </ResultTemplate>
+</BlazoredTypeahead>
+
+@if (selectedResult is not null)
+{
+  <h1>Selected Chapter</h1>
+  <ul>
+    <li>Title: @selectedResult.BibleBook.Title</li>
+    <li>Abbreviation:  @selectedResult.BibleBook.Abrv</li>
+    <li>Last Chapter: @selectedResult.BibleBook.LastChapter</li>
+  </ul>
+  
+}
+*@

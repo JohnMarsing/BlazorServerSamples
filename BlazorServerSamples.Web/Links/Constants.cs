@@ -49,6 +49,13 @@ public static class CascadingValue
 	public const string Icon = "bi bi-filter-right";  
 }
 
+public static class NavigationSearch
+{
+	public const string Index = "/NavigationSearch";
+	public const string Title = "Navigation Search";
+	public const string Icon = "bi bi-search"; // "fas fa-torah";
+}
+
 public static class Parasha
 {
 	public const string Index = "/Parasha";
@@ -68,6 +75,14 @@ public static class Parasha
 		}
 	}
 }
+
+public static class SearchTypeahead
+{
+	public const string Index = "/SearchTypeahead";
+	public const string Title = "Search Typeahead";
+	public const string Icon = "bi bi-search"; // "fas fa-torah";
+}
+
 
 public static class Sitemap
 {

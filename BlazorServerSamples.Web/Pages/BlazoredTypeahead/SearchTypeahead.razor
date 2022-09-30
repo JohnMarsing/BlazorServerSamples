@@ -1,0 +1,33 @@
+﻿@page "/SearchTypeahead"
+@using Page = BlazorServerSamples.Web.Links.SearchTypeahead
+@using BlazorServerSamples.Web.Enums;
+<PageTitle>@Page.Title</PageTitle>
+
+<div class="pb-1 mt-4 mb-5">
+	<h1><i class="@Page.Icon"></i> @Page.Title</h1>
+</div>
+
+<EditForm Model="FormModel" OnValidSubmit="HandlValidSubmit">
+	<DataAnnotationsValidator />
+
+	<BlazoredTypeahead SearchMethod="SearchBibleBooks"
+										 @bind-Value="FormModel.SelectedChapter"
+										 EnableDropDown="true"
+										 MinimumLength="1"
+										 placeholder="Search by book name...">
+		<SelectedTemplate Context="book">
+			@book.
+		</SelectedTemplate>
+		<HelpTemplate>
+			Please enter at least 1 character to perform a search.
+		</HelpTemplate>
+		        <ResultTemplate Context="person">
+            @person.Firstname @person.Lastname
+        </ResultTemplate>
+
+
+	</BlazoredTypeahead>
+	<ValidationMessage For="@(() => FormModel.SelectedChapter)" />
+
+	<button class="btn btn-primary" type="submit" style="margin-top: 20px;">Submit</button>
+</EditForm>

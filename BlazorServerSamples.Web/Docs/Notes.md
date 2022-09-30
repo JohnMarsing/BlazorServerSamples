@@ -1,5 +1,14 @@
 ﻿# Catchall Notes
 
+# john-009-add-search
+
+- Serilog / Seq nuget updates
+
+### [Blazored Typeahead Readme](https://github.com/Blazored/Typeahead)
+> The component can be used standalone or as part of a form. When used in a form the control fully integrates with 
+  Blazor's forms and authentication system.
+
+---
 
 https://chrissainty.com/building-a-simple-tooltip-component-for-blazor-in-under-10-lines-of-code/
 https://chrissainty.com/auto-saving-form-data-in-blazor/
