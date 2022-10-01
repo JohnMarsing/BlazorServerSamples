@@ -6,16 +6,17 @@ namespace BlazorServerSamples.Web.Pages.BibleSearch;
 public class FormValidation
 {
 	[Required]
+	[Display(Name = "Book")]
 	public BibleBook SelectedBook { get; set; }
 
-	public string MhbUrl
-	{
-		get => "https://myhebrewbible.com/BookChapter/" + SelectedBook.Title + "/" + SelectedBook.Value + "/slug";
-	}
-
-	public string Mhb(int chapter)
+	public string MyHebrewBibleBookChapterUrl(int chapter)
 	{
 		return "https://myhebrewbible.com/BookChapter/" + SelectedBook.Title + "/" + chapter + "/slug";
+	}
+
+	public string MyHebrewBibleBookChapterTitle(int chapter)
+	{
+		return "MyHebrewBible.com/BookChapter/" + SelectedBook.Title + "/" + chapter;
 	}
 
 }

@@ -2,9 +2,10 @@
 
 namespace BlazorServerSamples.Web.Pages.PersonSearch;
 
-public class FormExample
+public class FormValidation
 {
 	[Required]
+	[Display(Name = "Person")]
 	public Person SelectedPerson { get; set; }
 }
 

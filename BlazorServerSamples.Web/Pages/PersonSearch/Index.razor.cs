@@ -14,7 +14,7 @@ public partial class Index
 
 	private IList<Person> SelectedPeopleWithNotFoundTemplate; 
 
-	private FormExample FormModel = new FormExample();
+	private FormValidation FormModel = new FormValidation();
 
 	protected override void OnInitialized()
 	{
