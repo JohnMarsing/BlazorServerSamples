@@ -1,0 +1,226 @@
+﻿@page "/People"
+
+@using Page = BlazorServerSamples.Web.Links.People
+
+<PageTitle>@Page.Title</PageTitle>
+
+<div class="pb-2 mt-4 mb-2 border-bottom">
+	<h1><i class="@Page.Icon"></i> @Page.Title</h1>
+</div>
+
+<div class="card mt-4 p-2 bg-light">
+
+	<h3>Form</h3>
+
+	<EditForm Model="FormModel" OnValidSubmit="HandleFormSubmit">
+		<DataAnnotationsValidator />
+
+		<BlazoredTypeahead SearchMethod="GetPeopleLocal"
+											 @bind-Value="FormModel.SelectedPerson"
+											 EnableDropDown="true"
+											 MinimumLength="3"
+											 placeholder="Search by first name...">
+			<SelectedTemplate Context="mycontext">
+				@mycontext.Firstname
+			</SelectedTemplate>
+			<HelpTemplate>
+				Please enter at least 3 character to perform a search.
+			</HelpTemplate>
+			<ResultTemplate Context="mycontext">
+				@mycontext.Firstname @mycontext.Lastname
+			</ResultTemplate>
+		</BlazoredTypeahead>
+		<ValidationMessage For="@(() => FormModel.SelectedPerson)" />
+
+		<button class="btn btn-primary m-1" type="submit">Submit</button>
+	</EditForm>
+
+	@if (FormModel.SelectedPerson != null)
+	{
+		<div class="card-body">
+			<p><strong>Selected Person:</strong> @FormModel.SelectedPerson.Firstname @FormModel.SelectedPerson.Lastname</p>
+		</div>
+
+	}
+</div>
+
+<div class="card mt-4 p-2 bg-light">
+	<h3>Standalone</h3>
+
+	<BlazoredTypeahead SearchMethod="GetPeopleLocal"
+										 @bind-Value="SelectedPerson"
+										 ShowDropDownOnFocus="true"
+										 placeholder="Search by first name...">
+		<SelectedTemplate Context="person">
+			@person.Firstname
+		</SelectedTemplate>
+		<ResultTemplate Context="person">
+			@person.Firstname @person.Lastname
+		</ResultTemplate>
+	</BlazoredTypeahead>
+
+	<div class="card-body">
+		@if (SelectedPerson != null)
+		{
+			<p>Selected: @SelectedPerson.Firstname @SelectedPerson.Lastname</p>
+		}
+	</div>
+</div>
+
+
+<div class="card mt-4 p-2 bg-light">
+	<h3>Disabled</h3>
+
+	@*<div class="card-body">	</div>*@
+	<BlazoredTypeahead SearchMethod="@GetPeopleLocal"
+										 @bind-Value="@SelectedPerson"
+										 Disabled="IsDisabled"
+										 placeholder="Search by first name...">
+		<SelectedTemplate Context="person">
+			@person.Firstname
+		</SelectedTemplate>
+		<ResultTemplate Context="person">
+			@person.Firstname @person.Lastname
+		</ResultTemplate>
+	</BlazoredTypeahead>
+
+	<div class="card-body">
+		<button class="btn btn-primary" @onclick="@(() => IsDisabled = !IsDisabled)">@(IsDisabled ? "Enable" : "Disable")</button>
+	</div>
+
+</div>
+
+
+<div class="card mt-4 p-2 bg-light">
+	<h3>Disabled (Null Value)</h3>
+
+	<BlazoredTypeahead SearchMethod="@GetPeopleLocal"
+										 @bind-Value="@SelectedPersonNull"
+										 Disabled="IsDisabled"
+										 placeholder="Search by first name...">
+		<SelectedTemplate Context="person">
+			@person.Firstname
+		</SelectedTemplate>
+		<ResultTemplate Context="person">
+			@person.Firstname @person.Lastname
+		</ResultTemplate>
+	</BlazoredTypeahead>
+
+	<div class="card-body">
+		<button class="btn btn-primary" @onclick="@(() => IsDisabled = !IsDisabled)">@(IsDisabled ? "Enable" : "Disable")</button>
+	</div>
+</div>
+
+
+<div class="card mt-4 p-2 bg-light">
+	<h3>Binding to different type</h3>
+
+	<BlazoredTypeahead SearchMethod="GetPeopleLocal"
+										 ConvertMethod="ConvertPerson"
+										 @bind-Value="SelectedPersonId"
+										 placeholder="Search by first name...">
+		<SelectedTemplate Context="personId">
+			@{
+				var selectedPerson = LoadSelectedPerson(personId);
+				<text>@selectedPerson?.Firstname @selectedPerson?.Lastname</text>
+			}
+		</SelectedTemplate>
+		<ResultTemplate Context="person">
+			@person.Firstname @person.Lastname (Id: @person.Id)
+		</ResultTemplate>
+	</BlazoredTypeahead>
+
+	<div class="card-body">
+		@if (SelectedPersonId != null && SelectedPersonId > 0)
+		{
+			<p>Selected Person Id: @SelectedPersonId</p>
+		}
+	</div>
+</div>
+
+<div class="card mt-4 p-2 bg-light">
+	<h3>Multi-select</h3>
+	<BlazoredTypeahead SearchMethod="GetPeopleLocal"
+										 @bind-Values="SelectedPeople"
+										 Disabled="IsDisabledMulti"
+										 EnableDropDown="true"
+										 MinimumLength="2"
+										 placeholder="Search by first name...">
+		<SelectedTemplate Context="person">
+			@person.Firstname
+		</SelectedTemplate>
+		<HelpTemplate>
+			Please enter a minimum of 2 characters to perform a search.
+		</HelpTemplate>
+		<ResultTemplate Context="person">
+			@person.Firstname @person.Lastname (Id: @person.Id)
+		</ResultTemplate>
+	</BlazoredTypeahead>
+
+	<div class="card-body">
+		<button class="btn btn-primary" @onclick="@(() => IsDisabledMulti = !IsDisabledMulti)">@(IsDisabledMulti ? "Enable" : "Disable")</button>
+	</div>
+
+	<div class="card-body">
+		@if (SelectedPeople != null)
+		{
+			<p>Selected People:</p>
+			<ul class="list-group">
+				@foreach (var person in SelectedPeople)
+				{
+					<li class="list-group-item">
+						@person.Firstname @person.Lastname
+					</li>
+				}
+			</ul>
+		}
+	</div>
+
+</div>
+
+<div class="card mt-4 p-2 bg-light">
+	<h3>Multi-select - Adding items on empty search result</h3>
+
+	<BlazoredTypeahead SearchMethod="GetPeopleLocal"
+										 @bind-Values="SelectedPeopleWithNotFoundTemplate"
+										 Disabled="IsDisabledMulti"
+										 EnableDropDown="true"
+										 MinimumLength="2"
+										 AddItemOnEmptyResultMethod="ItemAddedMethod"
+										 placeholder="Search by first name...">
+		<SelectedTemplate Context="person">
+			@person.Firstname
+		</SelectedTemplate>
+		<HelpTemplate>
+			Please enter a minimum of 2 characters to perform a search.
+		</HelpTemplate>
+		<NotFoundTemplate Context="searchText">
+			Add "@searchText" as a new user <br />
+			The newly added user will be selected after being added.
+		</NotFoundTemplate>
+		<ResultTemplate Context="person">
+			@person.Firstname @person.Lastname (Id: @person.Id)
+		</ResultTemplate>
+	</BlazoredTypeahead>
+
+	<div class="card-body">
+		<p>
+			<button class="btn btn-primary" @onclick="@(() => IsDisabledMulti = !IsDisabledMulti)">@(IsDisabledMulti ? "Enable" : "Disable")</button>
+		</p>
+	</div>
+
+	<div class="card-body">
+		@if (SelectedPeopleWithNotFoundTemplate != null)
+		{
+			<p>Selected People:</p>
+			<ul>
+				@foreach (var person in SelectedPeopleWithNotFoundTemplate)
+				{
+					<li>@person.Firstname @person.Lastname</li>
+				}
+			</ul>
+		}
+	</div>
+
+</div>
+

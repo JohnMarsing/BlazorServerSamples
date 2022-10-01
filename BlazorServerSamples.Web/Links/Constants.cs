@@ -19,6 +19,13 @@ public static class About
 	public const string Icon = "bi bi-info-circle"; // "fas fa-info";
 }
 
+public static class BibleSearch
+{
+	public const string Index = "/BibleSearch";
+	public const string Title = "Bible Search";
+	public const string Icon = "bi bi-search";
+}
+
 public static class BlazedFvSingle
 {
 	public const string Index = "/BlazedFvSingle";
@@ -76,13 +83,12 @@ public static class Parasha
 	}
 }
 
-public static class SearchTypeahead
+public static class People
 {
-	public const string Index = "/SearchTypeahead";
-	public const string Title = "Search Typeahead";
-	public const string Icon = "bi bi-search"; // "fas fa-torah";
+	public const string Index = "/People";
+	public const string Title = "Blazored Typeahead";
+	public const string Icon = "bi bi-search"; 
 }
-
 
 public static class Sitemap
 {
