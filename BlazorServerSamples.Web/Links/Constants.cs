@@ -1,4 +1,6 @@
-﻿namespace BlazorServerSamples.Web.Links;
+﻿using Microsoft.AspNetCore.Components;
+
+namespace BlazorServerSamples.Web.Links;
 
 /*
 https://icons.getbootstrap.com/
@@ -41,6 +43,31 @@ public static class BlazedFvMulti
 	public const string SubTitle = "Blazed FV People";
 	public const string Icon = "bi bi-bricks";
 }
+
+public static class BootstrapCarousel
+{
+	public const string Index = "/BootstrapCarousel";
+	public const string Title = "Bootstrap Carousel";
+	public const string Icon = "bi bi-lightning"; //"bi bi-car-front";
+	public static MarkupString SubTitle = (MarkupString)"<a href='https://www.prowaretech.com/articles/current/blazor/wasm/bootstrap-enable-carousel#!' title='Create a RAZOR Page for the Carousel' target='_blank'> <span class='float-end'<i class='bi bi-github'></i> Source</span></a>";
+}
+
+/*
+	public static MarkupString SubTitle = (MarkupString)@"
+<a href='https://www.prowaretech.com/articles/current/blazor/wasm/bootstrap-enable-carousel#!' 
+title='Create a RAZOR Page for the Carousel' target='_blank'>
+<span class='float-end' <i class='bi bi-bootstrap'></i></span>
+</a>
+";
+*/
+
+public static class CallJS
+{
+	public const string Index = "/call-js-example-6";
+	public const string Title = "Call JS ";
+	public const string Icon = "bi bi-filetype-json";  
+}
+
 
 public static class DashBoard
 {

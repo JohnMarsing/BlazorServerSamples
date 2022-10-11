@@ -1,0 +1,54 @@
+﻿@page "/call-js-example-6"
+@using Page = BlazorServerSamples.Web.Links.CallJS
+
+<PageTitle>@Page.Title</PageTitle>
+
+<div class="pb-2 mt-4 mb-2">
+	<h1><i class="@Page.Icon"></i> @Page.Title</h1>
+</div>
+
+
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+
+<ul>
+	<li><a href="https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability/call-javascript-from-dotnet?view=aspnetcore-6.0">Docs | Call JavaScript functions from .NET methods in ASP.NET Core Blazor</a></li>
+	<li><a href="https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability/call-javascript-from-dotnet?view=aspnetcore-6.0#javascript-isolation-in-javascript-modules">Docs | JS Isolation in JS Modules</a></li>
+</ul>
+
+<p>
+	<button @onclick="TriggerPrompt">Trigger browser window prompt</button>
+</p>
+
+<p>@result</p>
+
+@code {
+	
+	private IJSObjectReference? module;
+	private string? result;
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			module = await JS.InvokeAsync<IJSObjectReference>("import",	"./scripts.js");
+		}
+	}
+
+	private async Task TriggerPrompt()
+	{
+		result = await Prompt("Provide some text");
+	}
+
+	public async ValueTask<string?> Prompt(string message) =>
+			module is not null ? await module.InvokeAsync<string>("showPrompt", message) : null;
+
+	async ValueTask IAsyncDisposable.DisposeAsync()
+	{
+		if (module is not null)
+		{
+			await module.DisposeAsync();
+		}
+	}
+}
